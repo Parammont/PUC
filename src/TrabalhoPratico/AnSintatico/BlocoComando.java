@@ -316,6 +316,9 @@ public class BlocoComando extends CasaToken {
         } else if (rl.getLexema().equals("!")) {
             CasaToken("!");
                 String dadosF[] = F();
+                resp[1] = "" + novoTemp(1);
+                LOD("A", dadosF[1]);
+                
             // deve se negar o resultade de F
             resp[0] = "tipo-logico";
         } else if (isNumero()) {

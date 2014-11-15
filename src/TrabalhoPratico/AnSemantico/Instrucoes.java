@@ -45,7 +45,7 @@ public class Instrucoes {
     //ADI	3	RegD <- RegD + Imed	ADI A,#1
     public void ADI(String regD, int Imed) {
         Principal.arquivo.gravarAsm("ADI " + regD + ",#" + Imed);
-        Principal.arquivo.gravarExe(2);
+        Principal.arquivo.gravarExe(3);
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(Imed);
         PC += 3;
@@ -54,30 +54,256 @@ public class Instrucoes {
     //ADIF	4	RegD <- RegD + Imed	ADIF A,#1.0
     public void ADIF(String regD, String Imed) {
         Principal.arquivo.gravarAsm("ADI " + regD + ",#" + Imed);
-        Principal.arquivo.gravarExe(2);
+        Principal.arquivo.gravarExe(4);
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(Imed);/// Aqui tem que separar parte inteira de fração *************************************************************************************
         PC += 4;
+        System.out.println("Atenção ADIF ERRADO");
     }
     
     //BNG	5	se (Reg<0) PC <- CS+Desl	BNG A,10(CS)
     public void BNG() {
-        //????????
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNG  A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(5);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
     }
 
     //BNGF	6	se (Reg<0) PC <- CS+Desl	BNGF A,10(CS)
-BNN	7	se (Reg≥0) PC <- CS+Desl	BNN A,10(CS)
-BNNF	8	se (Reg≥0) PC <- CS+Desl 	BNNF A,10(CS)
-BNP	9	se (Reg≤0) PC <- CS+Desl	BNP A,10(CS)
-BNPF	10	se (Reg≤0) PC <- CS+Desl	BNPF A,10(CS)
-BNZ	11	se (Reg≠0) PC <- CS+Desl	BNZ A,10(CS)
-BNZF	12	se (Reg≠0) PC <- CS+Desl 	BNZF A,10(CS)
-BPS	13	se (Reg>0) PC <- CS+Desl	BPS A,10(CS)
-BPSF	14	se (Reg>0) PC <- CS+Desl	BPSF A,10(CS)
-BZR	15	se (Reg=0) PC <- CS+Desl	BZR A,10(CS)
-BZRF	16	se (Reg=0) PC <- CS+Desl	BZRF A,10(CS)
+    public void BNGF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNGF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(6);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNN	7	se (Reg≥0) PC <- CS+Desl	BNN A,10(CS)
+    public void BNN() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNN A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(7);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNNF	8	se (Reg≥0) PC <- CS+Desl 	BNNF A,10(CS)
+    public void BNNF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNNF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(8);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNP	9	se (Reg≤0) PC <- CS+Desl	BNP A,10(CS)
+    public void BNP() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNP A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(9);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNPF	10	se (Reg≤0) PC <- CS+Desl	BNPF A,10(CS)
+    public void BNPF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNPF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(10);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNZ	11	se (Reg≠0) PC <- CS+Desl	BNZ A,10(CS)
+    public void BNZ() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNZ A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(11);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BNZF	12	se (Reg≠0) PC <- CS+Desl 	BNZF A,10(CS)
+    public void BNZF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BNZF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(12);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BPS	13	se (Reg>0) PC <- CS+Desl	BPS A,10(CS)
+    public void BPS() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BPS A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(13);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BPSF	14	se (Reg>0) PC <- CS+Desl	BPSF A,10(CS)
+    public void BPSF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BPSF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(14);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BZR	15	se (Reg=0) PC <- CS+Desl	BZR A,10(CS)
+    public void BZR() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BZR A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(15);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
+    
+    //BZRF	16	se (Reg=0) PC <- CS+Desl	BZRF A,10(CS)
+    public void BZRF() {
+        Rotulo rot = novoRot();
+        Principal.arquivo.gravarAsm("BZRF A, " + rot.getNome());
+        PC += 3;
+        Principal.arquivo.gravarExe(16);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(rot.end());
+    }
 
+    //CNV	17	RegD <- RegO		CNV A,A
+    public void CNV() {
+        Principal.arquivo.gravarAsm("CNV A,A");
+        PC += 3;
+        Principal.arquivo.gravarExe(17);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(1);
+    }
+    
+    //DIV	18	RegD <- RegD / RegO	DIV A,B
+    public void DIV() {
+        Principal.arquivo.gravarAsm("DIV A,B");
+        PC += 3;
+        Principal.arquivo.gravarExe(18);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(2);
+    }
+    
+    //ESC	19	Reg1 -> escala <- Reg2	ESC A,B
+    public void ESC() {
+        Principal.arquivo.gravarAsm("ESC A,B");
+        PC += 3;
+        Principal.arquivo.gravarExe(19);
+        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(2);
+    }
+    
+    //HLT	20	----------------------	HLT
+    public void HLT() {
+        Principal.arquivo.gravarAsm("HLT");
+        PC += 1;
+        Principal.arquivo.gravarExe(20);
+    }
 
+    //JMP	21	PC <- CS+Desl		JMP 10(CS)
+    public void JMP(int end) {
+        Principal.arquivo.gravarAsm("JMP " + end);
+        PC += 2;
+        Principal.arquivo.gravarExe(21);
+        Principal.arquivo.gravarExe(end);
+    }
+    
+    //LDI	22	RegD <- Imed		LDI A,#1
+    public void LDI(String regD, int Imed) {
+        Principal.arquivo.gravarAsm("LDI " + regD + ",#" + Imed);
+        PC += 3;
+        Principal.arquivo.gravarExe(22);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(Imed);
+    }
+    
+    //LDIF	23	RegD <- Imed		LDIF A,#1.0
+    public void LDIF(String regD, int Imed) {
+        Principal.arquivo.gravarAsm("LDIF " + regD + ",#" + Imed);
+        PC += 4;
+        Principal.arquivo.gravarExe(23);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(Imed);
+        Principal.arquivo.gravarExe(Imed);/// Aqui tem que separar parte inteira de fração *************************************************************************************
+        System.out.println("Atenção LDIF ERRADO");
+    }
+    
+    //LGT	24	LuzCor <- Reg		LGT A
+    public void LGT(String reg) {
+        Principal.arquivo.gravarAsm("LGT " + reg);
+        PC += 2;
+        Principal.arquivo.gravarExe(24);
+        Principal.arquivo.gravarExe(getReg(reg));
+    }
+    
+    //LOD	25	RegD <- M[DS+Desl]	LOD A,10(DS)
+    public void LOD(String regD, String M) {
+        Principal.arquivo.gravarAsm("LOD " + regD + "," + M + "(DS)");
+        PC += 3;
+        Principal.arquivo.gravarExe(25);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(M);
+    }
+    
+    //LODF	26	RegD <- M[DS+Desl]	LOD A,10(DS)
+    public void LODF(String regD, int M) {
+        Principal.arquivo.gravarAsm("LODF " + regD + "," + M + "(DS)");
+        PC += 3;
+        Principal.arquivo.gravarExe(26);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(M);
+    }
+
+    //MVE	27	RegD <- RegO		MVE A,B
+    public void MVE(String regD, String regO) {
+        Principal.arquivo.gravarAsm("MVE " + regD + "," + regO);
+        PC += 3;
+        Principal.arquivo.gravarExe(26);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+    }
+
+    //MVEF	28	RegD <- RegO		MVE A,B
+    public void MVEF(String regD, String regO) {
+        Principal.arquivo.gravarAsm("MVEF " + regD + "," + regO);
+        PC += 3;
+        Principal.arquivo.gravarExe(28);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+    }
+    
+    //MUL	29	RegD <- RegD x RegO	MUL A,B
+    public void MUL(String regD, String regO) {
+        Principal.arquivo.gravarAsm("MUL " + regD + "," + regO);
+        PC += 3;
+        Principal.arquivo.gravarExe(29);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+    }
+    
+    //MULF	30	RegD <- RegD x RegO	MUL A,B
+    public void MULF(String regD, String regO) {
+        Principal.arquivo.gravarAsm("MULF " + regD + "," + regO);
+        PC += 3;
+        Principal.arquivo.gravarExe(30);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+    }
 
     public void STIF() {
         String[] print = stif(rlAntigo.getInteiro(), rlAntigo.getDecimal());
