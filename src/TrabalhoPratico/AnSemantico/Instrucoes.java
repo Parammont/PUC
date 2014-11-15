@@ -19,7 +19,7 @@ public class Instrucoes {
     public static int contTemp = 0;          //contador de temporario
     public static int contRot = 0;           //contador de rotulos
     public static int PC = 0;
-    private static ArrayList<Rotulo> dadoRotulo;
+    private static ArrayList<Rotulo> dadoRotulo = new ArrayList<Rotulo>();
 
     public static int DS = 0;           //armazena o endereço da área de dados da memória principal
 
@@ -61,22 +61,20 @@ public class Instrucoes {
     }
 
     //BNG	5	se (Reg<0) PC <- CS+Desl	BNG A,10(CS)
-    public void BNG() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNG  A, " + rot.getNome());
+    public void BNG(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNG " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(5);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
     //BNGF	6	se (Reg<0) PC <- CS+Desl	BNGF A,10(CS)
-    public void BNGF() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNGF A, " + rot.getNome());
+    public void BNGF(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNGF " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(6);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
@@ -101,41 +99,38 @@ public class Instrucoes {
     }
 
     //BNP	9	se (Reg≤0) PC <- CS+Desl	BNP A,10(CS)
-    public void BNP() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNP A, " + rot.getNome());
+    public void BNP(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNP " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(9);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
     //BNPF	10	se (Reg≤0) PC <- CS+Desl	BNPF A,10(CS)
-    public void BNPF() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNPF A, " + rot.getNome());
+    public void BNPF(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNPF " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(10);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
     //BNZ	11	se (Reg≠0) PC <- CS+Desl	BNZ A,10(CS)
-    public void BNZ(String regD, Rotulo rot) {
-        Principal.arquivo.gravarAsm("BZR A, " + rot.getNome());
+    public void BNZ(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNZ " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(11);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
     //BNZF	12	se (Reg≠0) PC <- CS+Desl 	BNZF A,10(CS)
-    public void BNZF() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNZF A, " + rot.getNome());
+    public void BNZF(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BNZF " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(12);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
@@ -160,11 +155,11 @@ public class Instrucoes {
     }
 
     //BZR	15	se (Reg=0) PC <- CS+Desl	BZR A,10(CS)
-    public void BZR(String regD, Rotulo rot) {
-        Principal.arquivo.gravarAsm("BZR A, " + rot.getNome());
+    public void BZR(String reg, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BZR " + reg + "," + rot.getNome() + "(CS)");
         PC += 3;
         Principal.arquivo.gravarExe(15);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(reg));
         Principal.arquivo.gravarExe(rot.end());
     }
 
