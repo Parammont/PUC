@@ -23,7 +23,6 @@ public class Instrucoes {
 
     public static int DS = 0;           //armazena o endereço da área de dados da memória principal
 
-
     //ADD	1	RegD <- RegD + RegO	ADD A,B
     public void ADD(String regD, String regO) {
         Principal.arquivo.gravarAsm("ADD " + regD + "," + regO);
@@ -32,7 +31,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regO));
         PC += 3;
     }
-    
+
     //ADDF	2	RegD <- RegD + RegO	ADDF A,B
     public void ADDF(String regD, String regO) {
         Principal.arquivo.gravarAsm("ADDF " + regD + "," + regO);
@@ -41,7 +40,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regO));
         PC += 3;
     }
-    
+
     //ADI	3	RegD <- RegD + Imed	ADI A,#1
     public void ADI(String regD, int Imed) {
         Principal.arquivo.gravarAsm("ADI " + regD + ",#" + Imed);
@@ -50,7 +49,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(Imed);
         PC += 3;
     }
-    
+
     //ADIF	4	RegD <- RegD + Imed	ADIF A,#1.0
     public void ADIF(String regD, String Imed) {
         Principal.arquivo.gravarAsm("ADI " + regD + ",#" + Imed);
@@ -60,7 +59,7 @@ public class Instrucoes {
         PC += 4;
         System.out.println("Atenção ADIF ERRADO");
     }
-    
+
     //BNG	5	se (Reg<0) PC <- CS+Desl	BNG A,10(CS)
     public void BNG() {
         Rotulo rot = novoRot();
@@ -80,7 +79,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNN	7	se (Reg≥0) PC <- CS+Desl	BNN A,10(CS)
     public void BNN() {
         Rotulo rot = novoRot();
@@ -90,7 +89,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNNF	8	se (Reg≥0) PC <- CS+Desl 	BNNF A,10(CS)
     public void BNNF() {
         Rotulo rot = novoRot();
@@ -100,7 +99,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNP	9	se (Reg≤0) PC <- CS+Desl	BNP A,10(CS)
     public void BNP() {
         Rotulo rot = novoRot();
@@ -110,7 +109,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNPF	10	se (Reg≤0) PC <- CS+Desl	BNPF A,10(CS)
     public void BNPF() {
         Rotulo rot = novoRot();
@@ -120,17 +119,16 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNZ	11	se (Reg≠0) PC <- CS+Desl	BNZ A,10(CS)
-    public void BNZ() {
-        Rotulo rot = novoRot();
-        Principal.arquivo.gravarAsm("BNZ A, " + rot.getNome());
+    public void BNZ(String regD, Rotulo rot) {
+        Principal.arquivo.gravarAsm("BZR A, " + rot.getNome());
         PC += 3;
         Principal.arquivo.gravarExe(11);
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BNZF	12	se (Reg≠0) PC <- CS+Desl 	BNZF A,10(CS)
     public void BNZF() {
         Rotulo rot = novoRot();
@@ -140,7 +138,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BPS	13	se (Reg>0) PC <- CS+Desl	BPS A,10(CS)
     public void BPS() {
         Rotulo rot = novoRot();
@@ -150,7 +148,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BPSF	14	se (Reg>0) PC <- CS+Desl	BPSF A,10(CS)
     public void BPSF() {
         Rotulo rot = novoRot();
@@ -160,17 +158,16 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BZR	15	se (Reg=0) PC <- CS+Desl	BZR A,10(CS)
-    public void BZR() {
-        Rotulo rot = novoRot();
+    public void BZR(String regD, Rotulo rot) {
         Principal.arquivo.gravarAsm("BZR A, " + rot.getNome());
         PC += 3;
         Principal.arquivo.gravarExe(15);
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(rot.end());
     }
-    
+
     //BZRF	16	se (Reg=0) PC <- CS+Desl	BZRF A,10(CS)
     public void BZRF() {
         Rotulo rot = novoRot();
@@ -182,23 +179,23 @@ public class Instrucoes {
     }
 
     //CNV	17	RegD <- RegO		CNV A,A
-    public void CNV() {
-        Principal.arquivo.gravarAsm("CNV A,A");
+    public void CNV(String regD, String regO) {
+        Principal.arquivo.gravarAsm("CNV " + regD + "," + regO);
         PC += 3;
         Principal.arquivo.gravarExe(17);
-        Principal.arquivo.gravarExe(1);
-        Principal.arquivo.gravarExe(1);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
     }
-    
+
     //DIV	18	RegD <- RegD / RegO	DIV A,B
-    public void DIV() {
-        Principal.arquivo.gravarAsm("DIV A,B");
+    public void DIV(String regD, String regO) {
+        Principal.arquivo.gravarAsm("DIV " + regD + "," + regO);
         PC += 3;
         Principal.arquivo.gravarExe(18);
-        Principal.arquivo.gravarExe(1);
-        Principal.arquivo.gravarExe(2);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
     }
-    
+
     //ESC	19	Reg1 -> escala <- Reg2	ESC A,B
     public void ESC() {
         Principal.arquivo.gravarAsm("ESC A,B");
@@ -207,7 +204,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(1);
         Principal.arquivo.gravarExe(2);
     }
-    
+
     //HLT	20	----------------------	HLT
     public void HLT() {
         Principal.arquivo.gravarAsm("HLT");
@@ -222,7 +219,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(21);
         Principal.arquivo.gravarExe(end);
     }
-    
+
     //LDI	22	RegD <- Imed		LDI A,#1
     public void LDI(String regD, int Imed) {
         Principal.arquivo.gravarAsm("LDI " + regD + ",#" + Imed);
@@ -231,7 +228,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(Imed);
     }
-    
+
     //LDIF	23	RegD <- Imed		LDIF A,#1.0
     public void LDIF(String regD, int Imed) {
         Principal.arquivo.gravarAsm("LDIF " + regD + ",#" + Imed);
@@ -242,7 +239,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(Imed);/// Aqui tem que separar parte inteira de fração *************************************************************************************
         System.out.println("Atenção LDIF ERRADO");
     }
-    
+
     //LGT	24	LuzCor <- Reg		LGT A
     public void LGT(String reg) {
         Principal.arquivo.gravarAsm("LGT " + reg);
@@ -250,7 +247,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(24);
         Principal.arquivo.gravarExe(getReg(reg));
     }
-    
+
     //LOD	25	RegD <- M[DS+Desl]	LOD A,10(DS)
     public void LOD(String regD, String M) {
         Principal.arquivo.gravarAsm("LOD " + regD + "," + M + "(DS)");
@@ -259,9 +256,9 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(M);
     }
-    
+
     //LODF	26	RegD <- M[DS+Desl]	LOD A,10(DS)
-    public void LODF(String regD, int M) {
+    public void LODF(String regD, String M) {
         Principal.arquivo.gravarAsm("LODF " + regD + "," + M + "(DS)");
         PC += 3;
         Principal.arquivo.gravarExe(26);
@@ -286,7 +283,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(getReg(regO));
     }
-    
+
     //MUL	29	RegD <- RegD x RegO	MUL A,B
     public void MUL(String regD, String regO) {
         Principal.arquivo.gravarAsm("MUL " + regD + "," + regO);
@@ -295,7 +292,7 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regD));
         Principal.arquivo.gravarExe(getReg(regO));
     }
-    
+
     //MULF	30	RegD <- RegD x RegO	MUL A,B
     public void MULF(String regD, String regO) {
         Principal.arquivo.gravarAsm("MULF " + regD + "," + regO);
@@ -305,6 +302,39 @@ public class Instrucoes {
         Principal.arquivo.gravarExe(getReg(regO));
     }
 
+    //NEG	31	Reg <- - Reg		NEG A
+    public void NEG(String reg) {
+        Principal.arquivo.gravarAsm("NEG " + reg);
+        PC += 2;
+        Principal.arquivo.gravarExe(31);
+        Principal.arquivo.gravarExe(getReg(reg));
+    }
+
+//NEGF	32	Reg <- - Reg		NEGF A
+//RTR	33	----------------------	RTR
+    //STI	34	M[DS+Desl] <- Imed	STI #1,10(DS)       ******************************************************************************
+    public void STI() {
+        String[] print = sti(rlAntigo.getInteiro());
+        Principal.arquivo.gravarAsm(print[0]);
+        Principal.arquivo.gravarExe(34);
+        Principal.arquivo.gravarExe(print[1]);
+        Principal.arquivo.gravarExe(print[2]);
+    }
+
+    public String[] sti(int num) {
+        String[] print = new String[3];
+
+        String s_int = "" + num;
+        print[0] = "STI #" + s_int + " , " + DS + "(DS)";
+        rlAntigo.setEndMen(DS);
+        print[1] = s_int;
+        print[2] = "" + DS;
+        DS += 1;
+        PC += 3;
+        return print;
+    }
+
+    //STIF	34	M[DS+Desl] <- Imed	STI #1,10(DS)       ******************************************************************************
     public void STIF() {
         String[] print = stif(rlAntigo.getInteiro(), rlAntigo.getDecimal());
         Principal.arquivo.gravarAsm(print[0]);
@@ -329,28 +359,44 @@ public class Instrucoes {
         PC += 3;
         return print;
     }
-    
 
-    public void STI() {
-        String[] print = sti(rlAntigo.getInteiro());
-        Principal.arquivo.gravarAsm(print[0]);
-        Principal.arquivo.gravarExe(34);
-        Principal.arquivo.gravarExe(print[1]);
-        Principal.arquivo.gravarExe(print[2]);
-    }
-
-    public String[] sti(int num) {
-        String[] print = new String[3];
-
-        String s_int = "" + num;
-        print[0] = "STI #" + s_int + " , " + DS + "(DS)";
-        rlAntigo.setEndMen(DS);
-        print[1] = s_int;
-        print[2] = "" + DS;
-        DS += 1;
+    //STO	36	M[DS+Desl] <- Reg	STO A,10(DS)
+    public void STO(String regD, String M) {
+        Principal.arquivo.gravarAsm("STO " + regD + "," + M + "(DS)");
         PC += 3;
-        return print;
+        Principal.arquivo.gravarExe(36);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(M));
     }
+
+    //STOF	37	M[DS+Desl] <- Reg	STOF A,10(DS)
+    public void STOF(String regD, String M) {
+        Principal.arquivo.gravarAsm("STOF " + regD + "," + M + "(DS)");
+        PC += 3;
+        Principal.arquivo.gravarExe(36);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(M));
+    }
+
+    //SUB	38	RegD <- RegD – RegO	SUB A,B
+    public void SUB(String regD, String regO) {
+        Principal.arquivo.gravarAsm("SUB " + regD + "," + regO);
+        Principal.arquivo.gravarExe(38);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+        PC += 3;
+    }
+
+    //SUBF	39	RegD <- RegD – RegO	SUBF A,B
+    public void SUBF(String regD, String regO) {
+        Principal.arquivo.gravarAsm("SUBF " + regD + "," + regO);
+        Principal.arquivo.gravarExe(39);
+        Principal.arquivo.gravarExe(getReg(regD));
+        Principal.arquivo.gravarExe(getReg(regO));
+        PC += 3;
+    }
+
+//TIME	40	----------------------	TIME A
 
     private String paraString(int num) {
         String temp = "" + num;
