@@ -128,18 +128,8 @@ public class BlocoComando extends CasaToken {
         CasaToken("light");
         if (rl.getClasse().equals("classe-luz")) {
             id(new ClasseDeTeste(), true);
-            Principal.arquivo.gravarAsm("LDI " + "\\pegar uma letra livre na tabela" + " , #" + rlAntigo.getEndMen());
-            Principal.arquivo.gravarExe(22);
-            //Principal.arquivo.gravarExe(); Pegar o numero corespondente a letra escolhida
-            Principal.arquivo.gravarExe(1);//esta linha tem que sumir
-            Principal.arquivo.gravarExe(rlAntigo.getEndMen());
-
-            Principal.arquivo.gravarAsm("LGT " + "\\pegar a letra Utilizada");
-            Principal.arquivo.gravarExe(24);
-            //Principal.arquivo.gravarExe(); Pegar o numero corespondente a letra escolhida
-            Principal.arquivo.gravarExe(1);//esta linha tem que sumir
-
-            // Liberar a letra utilizada
+            LDI("A", rlAntigo.getEndMen());
+            LGT("A");
         } else {
             System.out.println(rl.getLinha() + ":Identificador incompativel [" + rl.getLexema() + "]");
             Principal.parar = true;
@@ -201,24 +191,24 @@ public class BlocoComando extends CasaToken {
             // Aqui tem loas de Exp em A e ExpS em B e sub A,B BZR e BZRF para desvio
             if (dadosExpS[0].equals(resp[0])) {
                 if (resp[0].equals("tipo-inteiro")) {
-                    //BNZ
+                    //BZR
                     LOD("A", resp[1]);
                     LOD("B", dadosExpS[1]);
                     SUB("A", "B");
 
                     Rotulo rot = novoRot();
-                    BNZ("A", rot);
+                    BZR("A", rot);
                     LDI("A", 1);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                 } else {
-                    //BNZF
+                    //BZRF
                     LODF("A", resp[1]);
                     LODF("B", dadosExpS[1]);
                     SUBF("A", "B");
 
                     Rotulo rot = novoRot();
-                    BNZF("A", rot);
+                    BZRF("A", rot);
                     LDIF("A", 1);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
@@ -235,15 +225,17 @@ public class BlocoComando extends CasaToken {
                     LOD("B", dadosExpS[1]);
                     CNV("B", "B");
                 }
-                //BNZF
+                //BZRF
                 SUBF("A", "B");
                 Rotulo rot = novoRot();
-                BNZF("A", rot);
+                BZRF("A", rot);
                 LDIF("A", 1);
                 Principal.arquivo.gravarAsm(rot.getNome() + ":");
                 //Principal.arquivo.gravarExe(rot.end());
-                resp[0] = "tipo-logico";
+                resp[0] = "tipo-real";
             }
+            resp = salvar(resp);
+            resp[0] = "tipo-logico";
 
         } else if (rl.getLexema().equals("<")) {
             CasaToken("<");
@@ -280,8 +272,8 @@ public class BlocoComando extends CasaToken {
                     if (resp[0].equals("tipo-inteiro")) {
                         //CNV
                         LOD("A", resp[1]);
-                        CNV("A", "A");
                         LODF("B", dadosExpS[1]);
+                        CNV("A", "A");
                     } else {
                         //CNV
                         LODF("A", resp[1]);
@@ -295,8 +287,7 @@ public class BlocoComando extends CasaToken {
                     LDIF("A", 1);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
-                    resp[0] = "tipo-logico";
-
+                    resp[0] = "tipo-real";
                 }
             } else {        //////////  no casso de ser apenas menor
                 String dadosExpS[] = ExpS();
@@ -345,47 +336,179 @@ public class BlocoComando extends CasaToken {
                     LDIF("A", 1);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
-                    resp[0] = "tipo-logico";
+                    resp[0] = "tipo-real";
                 }
             }
-
+            resp = salvar(resp);
             resp[0] = "tipo-logico";
+
         } else if (rl.getLexema().equals(">")) {
             CasaToken(">");
             if (rl.getLexema().equals("=")) {
                 CasaToken("=");
                 String dadosExpS[] = ExpS();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNN e BNNF para desvio
-            } else {
+                if (dadosExpS[0].equals(resp[0])) {
+                    if (resp[0].equals("tipo-inteiro")) {
+                        //BNN
+                        LOD("A", resp[1]);
+                        LOD("B", dadosExpS[1]);
+                        SUB("A", "B");
+
+                        Rotulo rot = novoRot();
+                        BNN("A", rot);
+                        LDI("A", 1);
+                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                        //Principal.arquivo.gravarExe(rot.end());
+
+                    } else {
+                        //BNNF
+                        LODF("A", resp[1]);
+                        LODF("B", dadosExpS[1]);
+                        SUBF("A", "B");
+
+                        Rotulo rot = novoRot();
+                        BNNF("A", rot);
+                        LDIF("A", 1);
+                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                        //Principal.arquivo.gravarExe(rot.end());
+                    }
+                } else {    // tipos diferentes
+                    if (resp[0].equals("tipo-inteiro")) {
+                        //CNV
+                        LOD("A", resp[1]);
+                        LODF("B", dadosExpS[1]);
+                        CNV("A", "A");
+                    } else {
+                        //CNV
+                        LODF("A", resp[1]);
+                        LOD("B", dadosExpS[1]);
+                        CNV("B", "B");
+                    }
+                    //BNNF
+                    SUBF("A", "B");
+                    Rotulo rot = novoRot();
+                    BNNF("A", rot);
+                    LDIF("A", 1);
+                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                    //Principal.arquivo.gravarExe(rot.end());
+                    resp[0] = "tipo-real";
+
+                }
+            } else {        //////////  no casso de ser apenas Maior
                 String dadosExpS[] = ExpS();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BPS e BPSF para desvio
-            }
+                if (dadosExpS[0].equals(resp[0])) {
+                    if (resp[0].equals("tipo-inteiro")) {
+                        //BPS
+                        LOD("A", resp[1]);
+                        LOD("B", dadosExpS[1]);
+                        SUB("A", "B");
 
+                        Rotulo rot = novoRot();
+                        BPS("A", rot);
+                        LDI("A", 1);
+                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                        //Principal.arquivo.gravarExe(rot.end());
+
+                    } else {
+                        //BPSF
+                        LODF("A", resp[1]);
+                        LODF("B", dadosExpS[1]);
+                        SUBF("A", "B");
+
+                        Rotulo rot = novoRot();
+                        BPSF("A", rot);
+                        LDIF("A", 1);
+                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                        //Principal.arquivo.gravarExe(rot.end());
+                    }
+                } else {    // tipos diferentes
+                    if (resp[0].equals("tipo-inteiro")) {
+                        //CNV
+                        LOD("A", resp[1]);
+                        LODF("B", dadosExpS[1]);
+                        CNV("A", "A");
+                    } else {
+                        //CNV
+                        LODF("A", resp[1]);
+                        LOD("B", dadosExpS[1]);
+                        CNV("B", "B");
+                    }
+                    //BPSF
+                    SUBF("A", "B");
+                    Rotulo rot = novoRot();
+                    BPSF("A", rot);
+                    LDIF("A", 1);
+                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                    //Principal.arquivo.gravarExe(rot.end());
+                    resp[0] = "tipo-real";
+                }
+            }
+            resp = salvar(resp);
             resp[0] = "tipo-logico";
+            
         } else if (rl.getLexema().equals("!")) {
             CasaToken("!");
             CasaToken("=");
             String dadosExpS[] = ExpS();
             // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNZ e BNZF para desvio
+            if (dadosExpS[0].equals(resp[0])) {
+                if (resp[0].equals("tipo-inteiro")) {
+                    //BNZ
+                    LOD("A", resp[1]);
+                    LOD("B", dadosExpS[1]);
+                    SUB("A", "B");
 
+                    Rotulo rot = novoRot();
+                    BNZ("A", rot);
+                    LDI("A", 1);
+                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                    //Principal.arquivo.gravarExe(rot.end());
+                } else {
+                    //BNZF
+                    LODF("A", resp[1]);
+                    LODF("B", dadosExpS[1]);
+                    SUBF("A", "B");
+
+                    Rotulo rot = novoRot();
+                    BNZF("A", rot);
+                    LDIF("A", 1);
+                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                    //Principal.arquivo.gravarExe(rot.end());
+                }
+            } else {    // tipos diferentes
+                if (resp[0].equals("tipo-inteiro")) {
+                    //CNV
+                    LOD("A", resp[1]);
+                    LODF("B", dadosExpS[1]);
+                    CNV("A", "A");
+                } else {
+                    //CNV
+                    LODF("A", resp[1]);
+                    LOD("B", dadosExpS[1]);
+                    CNV("B", "B");
+                }
+                //BNZF
+                SUBF("A", "B");
+                Rotulo rot = novoRot();
+                BNZF("A", rot);
+                LDIF("A", 1);
+                Principal.arquivo.gravarAsm(rot.getNome() + ":");
+                //Principal.arquivo.gravarExe(rot.end());
+                resp[0] = "tipo-real";
+            }
+            resp = salvar(resp);
             resp[0] = "tipo-logico";
         }
-
-        if (resp[0].equals("tipo-inteiro")) {
-            resp[1] = "" + novoTemp(1);
-            STO("A", resp[1]);
-        } else {
-            resp[1] = "" + novoTemp(2);
-            STOF("A", resp[1]);
-        }
         return resp;
-
     }
 
     //ExpS -> T {(+ | - | || )T}
     private String[] ExpS() {
         String resp[] = T();        //onde tipo 0 e end 1
         while ((rl.getLexema().equals("+") || rl.getLexema().equals("-") || rl.getLexema().equals("||")) && !(Principal.parar)) {
+            char operador = rl.getLexema().charAt(0);
             if (new ClasseDeTeste().isTipoLogico() && resp[0].equals("tipo-logico")) {
                 CasaToken(rl.getLexema());
                 String dadosT2[] = T();
@@ -420,8 +543,8 @@ public class BlocoComando extends CasaToken {
                 } else {
                     if (resp[0].equals("tipo-inteiro")) {
                         LOD("A", resp[1]);
-                        CNV("A", "A");
                         LODF("B", dadosT2[1]);
+                        CNV("A", "A");
                     } else {
                         LODF("A", resp[1]);
                         LOD("B", dadosT2[1]);
@@ -429,7 +552,7 @@ public class BlocoComando extends CasaToken {
                     }
                     resp[0] = "tipo-real";
                 }
-                if (rlAntigo.getLexema().equals("+")) {
+                if (operador == '+') {
                     if (resp[0].equals("tipo-inteiro")) {
                         ADD("A", "B");
                     } else {
@@ -443,13 +566,7 @@ public class BlocoComando extends CasaToken {
                     }
                 }
             }
-            if (resp[0].equals("tipo-inteiro")) {
-                resp[1] = "" + novoTemp(1);
-                STO("A", resp[1]);
-            } else {
-                resp[1] = "" + novoTemp(2);
-                STOF("A", resp[1]);
-            }
+            resp = salvar(resp);
         }
         return resp;
 
@@ -459,6 +576,7 @@ public class BlocoComando extends CasaToken {
     private String[] T() {
         String resp[] = F();   //onde tipo 0 e end 1
         while ((rl.getLexema().equals("*") || rl.getLexema().equals("/") || rl.getLexema().equals("&&")) && !(Principal.parar)) {
+            char operador = rl.getLexema().charAt(0);
             if (new ClasseDeTeste().isTipoLogico() && resp[0].equals("tipo-logico")) {
                 CasaToken(rl.getLexema());
                 String dadosF2[] = F();
@@ -495,8 +613,8 @@ public class BlocoComando extends CasaToken {
                 } else {
                     if (resp[0] == "tipo-inteiro") {
                         LOD("A", resp[1]);
-                        CNV("A", "A");
                         LODF("B", dadosF2[1]);
+                        CNV("A", "A");
                     } else {
                         LODF("A", resp[1]);
                         LOD("B", dadosF2[1]);
@@ -505,7 +623,7 @@ public class BlocoComando extends CasaToken {
                     resp[0] = "tipo-real";
                 }
 
-                if (rlAntigo.getLexema().equals("*")) {
+                if (operador == '*') {
                     if (resp[0] == "tipo-inteiro") {
                         MUL("A", "B");
                     } else {
@@ -515,13 +633,7 @@ public class BlocoComando extends CasaToken {
                     DIV("A", "B");
                 }
             }
-            if (resp[0].equals("tipo-inteiro")) {
-                resp[1] = "" + novoTemp(1);
-                STO("A", resp[1]);
-            } else {
-                resp[1] = "" + novoTemp(2);
-                STOF("A", resp[1]);
-            }
+            resp = salvar(resp);
         }
         return resp;
     }
@@ -570,6 +682,17 @@ public class BlocoComando extends CasaToken {
 
     private boolean ispalavraReservada() {
         return (rl.getEndereco() < 37);
+    }
+
+    private String[] salvar(String[] resp) {
+        if (resp[0].equals("tipo-real")) {
+            resp[1] = "" + novoTemp(2);
+            STOF("A", resp[1]);
+        } else {
+            resp[1] = "" + novoTemp(1);
+            STO("A", resp[1]);
+        }
+        return resp;
     }
 
 }
