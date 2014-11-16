@@ -209,7 +209,7 @@ public class BlocoComando extends CasaToken {
 
                     Rotulo rot = novoRot();
                     BZRF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                 }
@@ -229,7 +229,7 @@ public class BlocoComando extends CasaToken {
                 SUBF("A", "B");
                 Rotulo rot = novoRot();
                 BZRF("A", rot);
-                LDIF("A", 1);
+                LDIF("A", 1, 0);
                 Principal.arquivo.gravarAsm(rot.getNome() + ":");
                 //Principal.arquivo.gravarExe(rot.end());
                 resp[0] = "tipo-real";
@@ -264,7 +264,7 @@ public class BlocoComando extends CasaToken {
 
                         Rotulo rot = novoRot();
                         BNPF("A", rot);
-                        LDIF("A", 1);
+                        LDIF("A", 1, 0);
                         Principal.arquivo.gravarAsm(rot.getNome() + ":");
                         //Principal.arquivo.gravarExe(rot.end());
                     }
@@ -284,7 +284,7 @@ public class BlocoComando extends CasaToken {
                     SUBF("A", "B");
                     Rotulo rot = novoRot();
                     BNPF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                     resp[0] = "tipo-real";
@@ -313,7 +313,7 @@ public class BlocoComando extends CasaToken {
 
                         Rotulo rot = novoRot();
                         BNGF("A", rot);
-                        LDIF("A", 1);
+                        LDIF("A", 1, 0);
                         Principal.arquivo.gravarAsm(rot.getNome() + ":");
                         //Principal.arquivo.gravarExe(rot.end());
                     }
@@ -333,7 +333,7 @@ public class BlocoComando extends CasaToken {
                     SUBF("A", "B");
                     Rotulo rot = novoRot();
                     BNGF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                     resp[0] = "tipo-real";
@@ -369,7 +369,7 @@ public class BlocoComando extends CasaToken {
 
                         Rotulo rot = novoRot();
                         BNNF("A", rot);
-                        LDIF("A", 1);
+                        LDIF("A", 1, 0);
                         Principal.arquivo.gravarAsm(rot.getNome() + ":");
                         //Principal.arquivo.gravarExe(rot.end());
                     }
@@ -389,7 +389,7 @@ public class BlocoComando extends CasaToken {
                     SUBF("A", "B");
                     Rotulo rot = novoRot();
                     BNNF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                     resp[0] = "tipo-real";
@@ -419,7 +419,7 @@ public class BlocoComando extends CasaToken {
 
                         Rotulo rot = novoRot();
                         BPSF("A", rot);
-                        LDIF("A", 1);
+                        LDIF("A", 1, 0);
                         Principal.arquivo.gravarAsm(rot.getNome() + ":");
                         //Principal.arquivo.gravarExe(rot.end());
                     }
@@ -439,7 +439,7 @@ public class BlocoComando extends CasaToken {
                     SUBF("A", "B");
                     Rotulo rot = novoRot();
                     BPSF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                     resp[0] = "tipo-real";
@@ -473,7 +473,7 @@ public class BlocoComando extends CasaToken {
 
                     Rotulo rot = novoRot();
                     BNZF("A", rot);
-                    LDIF("A", 1);
+                    LDIF("A", 1, 0);
                     Principal.arquivo.gravarAsm(rot.getNome() + ":");
                     //Principal.arquivo.gravarExe(rot.end());
                 }
@@ -493,7 +493,7 @@ public class BlocoComando extends CasaToken {
                 SUBF("A", "B");
                 Rotulo rot = novoRot();
                 BNZF("A", rot);
-                LDIF("A", 1);
+                LDIF("A", 1, 0);
                 Principal.arquivo.gravarAsm(rot.getNome() + ":");
                 //Principal.arquivo.gravarExe(rot.end());
                 resp[0] = "tipo-real";
@@ -660,16 +660,20 @@ public class BlocoComando extends CasaToken {
             int tamanho = rlAntigo.getTipo().equals("tipo-inteiro") ? 1 : 2;
             resp[1] = "" + novoTemp(tamanho);
             if (tamanho == 1) {
-                Principal.arquivo.gravarAsm("STI  #" + rlAntigo.getLexema() + " , " + resp[1] + "(DS)");
+                rlAntigo.setEndMen(DS);
+                STI(rlAntigo.getInteiro(), resp[1]);
+/*                Principal.arquivo.gravarAsm("STI  #" + rlAntigo.getLexema() + " , " + resp[1] + "(DS)");
                 Principal.arquivo.gravarExe(34);                    //STI
                 Principal.arquivo.gravarExe(rlAntigo.getInteiro()); //parte inteira
-                Principal.arquivo.gravarExe(resp[1]);               //Endereço
+                Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
             } else {
-                Principal.arquivo.gravarAsm("STIF  #" + rlAntigo.getInteiro() + "." + rlAntigo.getDecimal() + " , " + resp[1] + "(DS)");
+                rlAntigo.setEndMen(DS);
+                STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), resp[1]);
+/*                Principal.arquivo.gravarAsm("STIF  #" + rlAntigo.getInteiro() + "." + rlAntigo.getDecimal() + " , " + resp[1] + "(DS)");
                 Principal.arquivo.gravarExe(35);                    //STIF
                 Principal.arquivo.gravarExe(rlAntigo.getInteiro());
                 Principal.arquivo.gravarExe(rlAntigo.getDecimal()); //parte Fracionada
-                Principal.arquivo.gravarExe(resp[1]);               //Endereço
+                Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
             }
         } else {
             CasaToken("(");

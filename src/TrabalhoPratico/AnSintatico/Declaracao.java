@@ -7,6 +7,8 @@
 package TrabalhoPratico.AnSintatico;
 
 import TrabalhoPratico.AnSemantico.*;
+import TrabalhoPratico.AnSemantico.Retrocorreção.Fila;
+import TrabalhoPratico.AnSemantico.Retrocorreção.dados;
 import TrabalhoPratico.LeituraArquivo;
 import TrabalhoPratico.Principal;
 import TrabalhoPratico.Registros.RegistroLexico;
@@ -66,13 +68,16 @@ public class Declaracao extends CasaToken {
             CasaToken("(");
 
             num();
-            STIF();
+            rlAntigo.setEndMen(DS);
+            STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), "" + DS);
             CasaToken(",");
             num();
-            STIF();
+            rlAntigo.setEndMen(DS);
+            STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), "" + DS);
             CasaToken(",");
             num();
-            STIF();
+            rlAntigo.setEndMen(DS);
+            STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), "" + DS);
 
             CasaToken(")");
             CasaToken(";");
@@ -88,25 +93,32 @@ public class Declaracao extends CasaToken {
             id(teste, false);
             CasaToken("=");
             num();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(",");
             X();
-            STI();
+            rlAntigo.setEndMen(DS);
+            STI(rlAntigo.getInteiro(), "" + DS);
             CasaToken(";");
 
         } while (isIdentificador());
@@ -118,33 +130,28 @@ public class Declaracao extends CasaToken {
 
         do {
             int cont = 0;
-            String printAsm = "";
-            String printExe [] = new String [30];
-            int ast = 0;
-            String temp[] = new String[2];
+            Fila inst2 = new Fila();
             rl.setEndMen(DS);
             int DSQuantPontos = DS++;
 
             id(teste, false);
             CasaToken("=");
             if (rl.getClasse().equals("classe-cor")) {
-                temp = sti(rl.getEndMen());
-                printAsm += ("\t" + temp[0] + '\n');
-                printExe[ast++] = temp[1];
-                printExe[ast++] = temp[2];
+                inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                DS += 1;
+                PC += 3;
                 id(teste, true);
             } else {
                 System.out.println(rl.getLinha() + ":identificador incompatível [" + rl.getLexema() + "]");
                 Principal.parar = true;
             }
-            
+
             while (rl.getLexema().equals(",") || cont < 3) {
                 CasaToken(",");
                 if (rl.getClasse().equals("classe-ponto")) {
-                    temp = sti(rl.getEndMen());
-                    printAsm += ("\t" + temp[0] + '\n');
-                printExe[ast++] = temp[1];
-                printExe[ast++] = temp[2];
+                    inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                    DS += 1;
+                    PC += 3;
                     id(teste, true);
                 } else {
                     System.out.println(rl.getLinha() + ":identificador incompatível [" + rl.getLexema() + "]");
@@ -153,15 +160,11 @@ public class Declaracao extends CasaToken {
                 cont++;
             }
             CasaToken(";");
-            Principal.arquivo.gravarAsm("STI #" + cont + " , " + DSQuantPontos + "(DS)");
-            Principal.arquivo.gravarExe(34);Principal.arquivo.gravarExe(cont);Principal.arquivo.gravarExe(DSQuantPontos);
-            
-            Principal.arquivo.gravarAsm2(printAsm);
-            
-            for (int i = 0; i < ast; i++) {
-                Principal.arquivo.gravarExe(34);
-                Principal.arquivo.gravarExe(printExe[i++]);
-                Principal.arquivo.gravarExe(printExe[i]);
+            STI(cont, "" + DSQuantPontos);
+            while (!inst2.vazia()) {
+                inst2.remove();
+                DS -= 1;
+                PC -= 3;
             }
         } while (isIdentificador());
     }
@@ -171,10 +174,7 @@ public class Declaracao extends CasaToken {
         CasaToken("object");
         do {
             int cont = 0;
-            String printAsm = "";
-            String printExe [] = new String [30];
-            int ast = 0;
-            String temp[] = new String[2];
+            Fila inst2 = new Fila();
             rl.setEndMen(DS);
             int DSQuantPontos = DS;
             DS = DS + 3;
@@ -182,10 +182,9 @@ public class Declaracao extends CasaToken {
             id(teste, false);
             CasaToken("=");
             if (rl.getClasse().equals("classe-face")) {
-                temp = sti(rl.getEndMen());
-                printAsm += ('\t' + temp[0] + "\n");
-                printExe[ast++] = temp[1];
-                printExe[ast++] = temp[2];
+                inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                DS += 1;
+                PC += 3;
                 id(teste, true);
             } else {
                 System.out.println(rl.getLinha() + ":identificador incompatível [" + rl.getLexema() + "]");
@@ -196,10 +195,9 @@ public class Declaracao extends CasaToken {
             while (rl.getLexema().equals(",")) {
                 CasaToken(",");
                 if (rl.getClasse().equals("classe-face")) {
-                    temp = sti(rl.getEndMen());
-                    printAsm += ('\t' + temp[0] + "\n");
-                printExe[ast++] = temp[1];
-                printExe[ast++] = temp[2];
+                    inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                    DS += 1;
+                    PC += 3;
                     id(teste, true);
                 } else {
                     System.out.println(rl.getLinha() + ":identificador incompatível [" + rl.getLexema() + "]");
@@ -208,19 +206,13 @@ public class Declaracao extends CasaToken {
                 cont++;
             }
             CasaToken(";");
-            Principal.arquivo.gravarAsm("STI  #" + cont + " , " + DSQuantPontos + "(DS)");
-            Principal.arquivo.gravarExe(34);Principal.arquivo.gravarExe(cont);Principal.arquivo.gravarExe(DSQuantPontos);
-            
-            Principal.arquivo.gravarAsm("STIF  #" + 1 + "." + "0000" + " , " + (DSQuantPontos + 1) + "(DS)");
-            Principal.arquivo.gravarExe(35);Principal.arquivo.gravarExe(1);Principal.arquivo.gravarExe("0000");
-            Principal.arquivo.gravarExe(DSQuantPontos + 1);
-            
-            Principal.arquivo.gravarAsm2(printAsm);
-            
-            for (int i = 0; i < ast; i++) {
-                Principal.arquivo.gravarExe(34);
-                Principal.arquivo.gravarExe(printExe[i++]);
-                Principal.arquivo.gravarExe(printExe[i]);
+
+            STI(cont, "" + DSQuantPontos);
+            STIF(1, 0, "" + (DSQuantPontos + 1));
+            while (!inst2.vazia()) {
+                inst2.remove();
+                DS -= 1;
+                PC -= 3;
             }
 
         } while (isIdentificador());
@@ -285,10 +277,10 @@ public class Declaracao extends CasaToken {
 
             if (rlAntigo.getTipo().equals("tipo-inteiro")) {
                 rlDeclarado.setTipo(true);
-                STI();
+                STI(rlAntigo.getInteiro(), ""+DS);
             } else {
                 rlDeclarado.setTipo(false);
-                STIF();
+                STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), ""+DS);
             }
             CasaToken(";");
         } while (isIdentificador());
