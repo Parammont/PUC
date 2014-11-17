@@ -259,7 +259,7 @@ public class LeituraArquivo {
 
             int numTeste1, numTeste2;
             boolean teste = true;//false;           // coloque false para exibir apartir da linha errada
-            for (int i = 0; i < 700; i++) {
+            for (int i = 0; i < 800; i++) {
                 if (i == 190) {
                     System.out.println("color");
                 }

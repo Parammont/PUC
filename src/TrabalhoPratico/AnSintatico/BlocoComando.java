@@ -27,16 +27,23 @@ public class BlocoComando extends CasaToken {
     private void Comando() {
         //comando -> id = Exp;
         if (isIdentificador()) {
+            Principal.arquivo.gravarAsm("************************** Atribuicao ******");
             if (rl.getClasse() == null) {
                 System.out.println(rl.getLinha() + "Clase do identificador nao declarado [" + rl.getLexema() + "]");
                 Principal.parar = true;
             }
-            id(new ClasseDeTeste(), true);           ///falta definir o ClasseDeTeste do AnSemantico
+            int end = rl.getEndMen();
+            id(new ClasseDeTeste(), true);
             CasaToken("=");
-            if (Exp().equals("tipo-logico")) {
+
+            String[] resp = Exp();
+            if (resp[0].equals("tipo-logico")) {
                 System.out.println(rl.getLinha() + ":tipos incompatíveis.");
                 Principal.parar = true;
             }
+            LOD("A", resp[1]);
+            STO("A", "" + end);
+
             CasaToken(";");
         } else if (rl.getLexema().equals("while")) {
             comandWhile();
@@ -62,16 +69,24 @@ public class BlocoComando extends CasaToken {
     private void comandWhile() {
         CasaToken("while");
         Principal.arquivo.gravarAsm("************************** Enquanto ******");
+        Rotulo rotInicio = novoRot();
+        Rotulo rotFim = novoRot();
+        fimDesvio(rotInicio);
         String resp[] = Exp();
         if (!(resp[0].equals("tipo-logico"))) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
+
+        BNG("A", rotFim);
+
         if (rl.getLexema().equals("begin")) {
             new BlocoComando();
         } else {
             Comando();
         }
+        JMP(rotInicio);
+        fimDesvio(rotFim);
     }
 
     //comando -> if Exp then (comando | BlocoComando) [else (BlocoComando | comando)]
@@ -109,24 +124,34 @@ public class BlocoComando extends CasaToken {
             Principal.parar = true;
         }
         CasaToken(",");
-        String [] temp2 = Exp();
+        String[] temp2 = Exp();
         if (temp2[0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         LODF("A", temp2[1]);
-        LDI("A",temp);
-        ESC("A","A");
+        LDI("A", temp);
+        ESC("A", "A");
         CasaToken(";");
     }
 
     //comando -> pause Exp;
     private void comandpause() {
         CasaToken("pause");
-        if (Exp().equals("tipo-logico")) {
+
+        String[] resp = Exp();
+        if (resp[0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
+
+        if (resp[0].equals("tipo-inteiro")) {
+            LOD("A", resp[1]);
+        } else {
+            LODF("A", resp[1]);
+        }
+        TME("A");
+
         CasaToken(";");
     }
 
@@ -147,6 +172,9 @@ public class BlocoComando extends CasaToken {
     //comando -> rottrans id, Exp,Exp, Exp, Exp, Exp, Exp;
     private void comandRottrans() {
         CasaToken("rottrans");
+        int end = rl.getEndMen();
+        String[][] resp = new String[6][];
+
         if (rl.getClasse().equals("classe-objeto")) {
             id(new ClasseDeTeste(), true);
         } else {
@@ -155,35 +183,54 @@ public class BlocoComando extends CasaToken {
         }
 
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[0] = Exp();
+        if (resp[0][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[1] = Exp();
+        if (resp[1][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[2] = Exp();
+        if (resp[2][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[3] = Exp();
+        if (resp[3][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[4] = Exp();
+        if (resp[4][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        resp[5] = Exp();
+        if (resp[5][0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
+
+        int j = 0;
+        for (char i = 'A'; i <= 'F'; i++, j++) {
+            if (resp[j][0].equals("tipo-inteiro")) {
+                LOD("" + i, resp[j][1]);
+                CNV("" + i, "" + i);
+            } else {
+                LODF("" + i, resp[j][1]);
+            }
+        }
+
+        LDI("A", end);
+        RTR();
         CasaToken(";");
     }
 
@@ -206,8 +253,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BZR("A", rot);
                     LDI("A", 1);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                 } else {
                     //BZRF
                     LODF("A", resp[1]);
@@ -217,8 +263,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BZRF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                 }
             } else {    // tipos diferentes
                 if (resp[0].equals("tipo-inteiro")) {
@@ -237,8 +282,7 @@ public class BlocoComando extends CasaToken {
                 Rotulo rot = novoRot();
                 BZRF("A", rot);
                 LDIF("A", 1, 0);
-                Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                //Principal.arquivo.gravarExe(rot.end());
+                fimDesvio(rot);
                 resp[0] = "tipo-real";
             }
             resp = salvar(resp);
@@ -260,8 +304,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNP("A", rot);
                         LDI("A", 1);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
 
                     } else {
                         //BNPF
@@ -272,8 +315,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNPF("A", rot);
                         LDIF("A", 1, 0);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -292,8 +334,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BNPF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                     resp[0] = "tipo-real";
                 }
             } else {        //////////  no casso de ser apenas menor
@@ -309,8 +350,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNG("A", rot);
                         LDI("A", 1);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
 
                     } else {
                         //BNGF
@@ -321,8 +361,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNGF("A", rot);
                         LDIF("A", 1, 0);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -341,8 +380,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BNGF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                     resp[0] = "tipo-real";
                 }
             }
@@ -365,8 +403,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNN("A", rot);
                         LDI("A", 1);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
 
                     } else {
                         //BNNF
@@ -377,8 +414,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BNNF("A", rot);
                         LDIF("A", 1, 0);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -397,8 +433,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BNNF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                     resp[0] = "tipo-real";
 
                 }
@@ -415,8 +450,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BPS("A", rot);
                         LDI("A", 1);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
 
                     } else {
                         //BPSF
@@ -427,8 +461,7 @@ public class BlocoComando extends CasaToken {
                         Rotulo rot = novoRot();
                         BPSF("A", rot);
                         LDIF("A", 1, 0);
-                        Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                        //Principal.arquivo.gravarExe(rot.end());
+                        fimDesvio(rot);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -447,14 +480,13 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BPSF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                     resp[0] = "tipo-real";
                 }
             }
             resp = salvar(resp);
             resp[0] = "tipo-logico";
-            
+
         } else if (rl.getLexema().equals("!")) {
             CasaToken("!");
             CasaToken("=");
@@ -470,8 +502,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BNZ("A", rot);
                     LDI("A", 1);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                 } else {
                     //BNZF
                     LODF("A", resp[1]);
@@ -481,8 +512,7 @@ public class BlocoComando extends CasaToken {
                     Rotulo rot = novoRot();
                     BNZF("A", rot);
                     LDIF("A", 1, 0);
-                    Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                    //Principal.arquivo.gravarExe(rot.end());
+                    fimDesvio(rot);
                 }
             } else {    // tipos diferentes
                 if (resp[0].equals("tipo-inteiro")) {
@@ -501,8 +531,7 @@ public class BlocoComando extends CasaToken {
                 Rotulo rot = novoRot();
                 BNZF("A", rot);
                 LDIF("A", 1, 0);
-                Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                //Principal.arquivo.gravarExe(rot.end());
+                fimDesvio(rot);
                 resp[0] = "tipo-real";
             }
             resp = salvar(resp);
@@ -529,8 +558,7 @@ public class BlocoComando extends CasaToken {
                 Rotulo rot = novoRot();
                 BZR("A", rot);
                 LDI("A", 1);
-                Principal.arquivo.gravarAsm(rot.getNome() + ":");
-                //Principal.arquivo.gravarExe(rot.end());
+                fimDesvio(rot);
 
             } else if (new ClasseDeTeste().isTipoLogico()) {
                 // O primeiro T não e logico
@@ -670,18 +698,18 @@ public class BlocoComando extends CasaToken {
             if (tamanho == 1) {
                 rlAntigo.setEndMen(DS);
                 STI(rlAntigo.getInteiro(), resp[1]);
-/*                Principal.arquivo.gravarAsm("STI  #" + rlAntigo.getLexema() + " , " + resp[1] + "(DS)");
-                Principal.arquivo.gravarExe(34);                    //STI
-                Principal.arquivo.gravarExe(rlAntigo.getInteiro()); //parte inteira
-                Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
+                /*                Principal.arquivo.gravarAsm("STI  #" + rlAntigo.getLexema() + " , " + resp[1] + "(DS)");
+                 Principal.arquivo.gravarExe(34);                    //STI
+                 Principal.arquivo.gravarExe(rlAntigo.getInteiro()); //parte inteira
+                 Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
             } else {
                 rlAntigo.setEndMen(DS);
                 STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), resp[1]);
-/*                Principal.arquivo.gravarAsm("STIF  #" + rlAntigo.getInteiro() + "." + rlAntigo.getDecimal() + " , " + resp[1] + "(DS)");
-                Principal.arquivo.gravarExe(35);                    //STIF
-                Principal.arquivo.gravarExe(rlAntigo.getInteiro());
-                Principal.arquivo.gravarExe(rlAntigo.getDecimal()); //parte Fracionada
-                Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
+                /*                Principal.arquivo.gravarAsm("STIF  #" + rlAntigo.getInteiro() + "." + rlAntigo.getDecimal() + " , " + resp[1] + "(DS)");
+                 Principal.arquivo.gravarExe(35);                    //STIF
+                 Principal.arquivo.gravarExe(rlAntigo.getInteiro());
+                 Principal.arquivo.gravarExe(rlAntigo.getDecimal()); //parte Fracionada
+                 Principal.arquivo.gravarExe(resp[1]);               //Endereço*/
             }
         } else {
             CasaToken("(");

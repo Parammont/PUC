@@ -29,7 +29,7 @@ public class Fila extends Instrucoes {
     public boolean liberado() {
         dados x = objetos.get(0);
         if (x.getRot() != null) {
-            System.out.println("Rota:" + x.getRot() + "  End:" + x.getRot().end());
+            //System.out.println("Rota:" + x.getRot() + "  End:" + x.getRot().end());
             if (x.getRot().end() < 0) {
                 return false;
             }
@@ -173,7 +173,7 @@ public class Fila extends Instrucoes {
                 SUBF(x.getReg1(), x.getReg2());
                 PC -= 3;
             } else if (inst == 40) {
-                TIME(x.getReg1());
+                TME(x.getReg1());
                 PC -= 2;
             } else {
                 System.out.println("ERRO ao remover da fila\nInstrução invalida: " + inst);

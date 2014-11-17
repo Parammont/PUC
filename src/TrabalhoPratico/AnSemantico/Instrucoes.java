@@ -85,7 +85,7 @@ public class Instrucoes {
     //BNG	5	se (Reg<0) PC <- CS+Desl	BNG A,10(CS)
     public void BNG(String reg, Rotulo rot) {
         if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNG " + reg + "," + rot.getNome());
+            Principal.arquivo.gravarAsm("\tBNG\t" + reg + " , " + rot.getNome());
             Principal.arquivo.gravarExe(5);
             Principal.arquivo.gravarExe(getReg(reg));
             Principal.arquivo.gravarExe(rot.end());
@@ -253,7 +253,7 @@ public class Instrucoes {
     //CNV	17	RegD <- RegO		CNV A,A
     public void CNV(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("CNV " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tCNV\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(17);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -354,7 +354,7 @@ public class Instrucoes {
     //LOD	25	RegD <- M[DS+Desl]	LOD A,10(DS)
     public void LOD(String regD, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("LOD " + regD + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tLOD\t" + regD + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(25);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(M);
@@ -456,7 +456,7 @@ public class Instrucoes {
     //RTR	33	----------------------	RTR
     public void RTR() {
         if (desvios) {
-            Principal.arquivo.gravarAsm("RTR");
+            Principal.arquivo.gravarAsm("\tRTR");
             Principal.arquivo.gravarExe(33);
         } else {
             inst.insere(new dados(33));
@@ -548,9 +548,9 @@ public class Instrucoes {
     }
 
 //TIME	40	----------------------	TIME A
-    public void TIME(String regD) {
+    public void TME(String regD) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("TIME " + regD);
+            Principal.arquivo.gravarAsm("\tTME " + regD);
             Principal.arquivo.gravarExe(40);
             Principal.arquivo.gravarExe(getReg(regD));
         } else {
@@ -572,10 +572,12 @@ public class Instrucoes {
         rot.setEndereco(PC);
         Principal.arquivo.gravarAsm(rot.getNome() + ":");
         //Principal.arquivo.gravarExe(rot.end());
-        for (desvios = inst.liberado(); desvios; desvios = inst.liberado()) {
-            inst.reiniciar();
+        if (!inst.vazia()) {
+            for (desvios = inst.liberado(); inst.vazia(); desvios = inst.liberado()) {
+                inst.reiniciar();
+            }
+            desvios = inst.vazia();
         }
-        desvios = inst.vazia();
     }
 
     public int novoTemp(int tamanho) {
