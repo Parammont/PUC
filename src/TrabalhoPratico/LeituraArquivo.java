@@ -67,28 +67,28 @@ public class LeituraArquivo {
         //gravarExe2 = new ObjectOutputStream(new FileOutputStream((nome + "2.exe")));
         //ObjectOutputStream objGravar = new ObjectOutputStream(arquivoGrav);
 /*
-        //new byte[]{35, (byte)Integer.parseInt((neg ? "-" : "")+tmp), (byte)Integer.parseInt((neg ? "-" : "")+temp
-        gravarExe(35);
-        gravarExe("-10");
-        gravarExe("-0000");
-        gravarExe(0);
-        //gravarExe.write(new byte[]{35, stringForBytes("-10")[0],stringForBytes("-10")[1], stringForBytes("-1")[0],stringForBytes("-1")[1], (byte) 0});
-        gravarExe(35);
-        gravarExe("10");
-        gravarExe("0000");
-        gravarExe(2);
-        //gravarExe.write(new byte[]{35, stringForBytes("10")[0],stringForBytes("10")[1], stringForBytes("00")[0],stringForBytes("00")[1], (byte) 2});
-        gravarExe(35);
-        gravarExe("10");
-        gravarExe("0000");
-        gravarExe(4);
-        //gravarExe.write(new byte[]{35, stringForBytes("10")[0],stringForBytes("10")[1], stringForBytes("00")[0],stringForBytes("00")[1], (byte) 4});
-        gravarExe(35);
-        gravarExe("-10");
-        gravarExe("-0000");
-        gravarExe(6);
-        //gravarExe.write(new byte[]{35, stringForBytes("-10")[0],stringForBytes("-10")[1], stringForBytes("-1")[0],stringForBytes("-1")[1], (byte) 6});
-*/        
+         //new byte[]{35, (byte)Integer.parseInt((neg ? "-" : "")+tmp), (byte)Integer.parseInt((neg ? "-" : "")+temp
+         gravarExe(35);
+         gravarExe("-10");
+         gravarExe("-0000");
+         gravarExe(0);
+         //gravarExe.write(new byte[]{35, stringForBytes("-10")[0],stringForBytes("-10")[1], stringForBytes("-1")[0],stringForBytes("-1")[1], (byte) 0});
+         gravarExe(35);
+         gravarExe("10");
+         gravarExe("0000");
+         gravarExe(2);
+         //gravarExe.write(new byte[]{35, stringForBytes("10")[0],stringForBytes("10")[1], stringForBytes("00")[0],stringForBytes("00")[1], (byte) 2});
+         gravarExe(35);
+         gravarExe("10");
+         gravarExe("0000");
+         gravarExe(4);
+         //gravarExe.write(new byte[]{35, stringForBytes("10")[0],stringForBytes("10")[1], stringForBytes("00")[0],stringForBytes("00")[1], (byte) 4});
+         gravarExe(35);
+         gravarExe("-10");
+         gravarExe("-0000");
+         gravarExe(6);
+         //gravarExe.write(new byte[]{35, stringForBytes("-10")[0],stringForBytes("-10")[1], stringForBytes("-1")[0],stringForBytes("-1")[1], (byte) 6});
+         */
     }
 
     // Ler a proxima linha enquanto o arquivo existir
@@ -148,7 +148,7 @@ public class LeituraArquivo {
             //System.out.println("Erro no teste da tabela");
         }
     }
-
+/*
     public void gravarAsm2(String linha) {
         try {
             for (int i = 0; i < linha.length(); i++) {
@@ -161,13 +161,13 @@ public class LeituraArquivo {
         } catch (IOException ex) {
             System.out.println("Erro ao gravar no arquivo ASM");
         }
-    }
+    }*/
 
     public void gravarAsm(String linha) {
         try {
             if (linha.length() > 0) {
                 //gravarAsm.writeObject(linha);
-                gravarAsm.write("\t" + linha);
+                gravarAsm.write(linha);
                 gravarAsm.newLine();
             } else {
                 System.out.println("Opa erro linha NULL, na linha: " + this.linha);
@@ -182,8 +182,15 @@ public class LeituraArquivo {
     //Grava um dado na posição de memoria (1/2 posição de memoria - 8 bits)
     public void gravarExe(int original) {
         try {
-                gravarExe.write((byte) (original % 255));
-                gravarExe.write((byte) (original / 255));
+            if (original < 0) {
+                original *= -1;
+                original--;
+                gravarExe.write((byte) (255 - (original % 256)));
+                gravarExe.write((byte) (255 - (original / 256)));
+            } else {
+                gravarExe.write((byte) (original % 256));
+                gravarExe.write((byte) (original / 256));
+            }
         } catch (IOException ex) {
             System.out.println("Erro ao gravar no arquivo EXE");
         }
@@ -195,7 +202,7 @@ public class LeituraArquivo {
             int original = Integer.parseInt(primeiro);
             if (original < 0) {
                 original *= -1;
-                original --;
+                original--;
                 gravarExe.write((byte) (255 - (original % 256)));
                 gravarExe.write((byte) (255 - (original / 256)));
             } else {
@@ -210,33 +217,33 @@ public class LeituraArquivo {
 
     //Grava um dado na posição de memoria (2 posição de memoria - 32 bits)
 /*    public void gravarExe(String primeiro, String segundo) {
-        try {
-            int original = Integer.parseInt(primeiro);
-            if (original < 0) {
-                original *= -1;
-                gravarExe.write((byte) (original % 255));
-                gravarExe.write((byte) (original / 255));
-            }
-            byte num[] = stringForBytes(primeiro);
-            gravarExe.write(num[0]);
-            gravarExe.write(num[1]);
-            if (num[1] < 0) {
-                num = stringForBytes(segundo);
-                gravarExe.write(num[0] + 255);
-                gravarExe.write(num[1] + 0);
-            } else {
-                num = stringForBytes(segundo);
-                gravarExe.write(num[0]);
-                gravarExe.write(num[1]);
-            }
+     try {
+     int original = Integer.parseInt(primeiro);
+     if (original < 0) {
+     original *= -1;
+     gravarExe.write((byte) (original % 255));
+     gravarExe.write((byte) (original / 255));
+     }
+     byte num[] = stringForBytes(primeiro);
+     gravarExe.write(num[0]);
+     gravarExe.write(num[1]);
+     if (num[1] < 0) {
+     num = stringForBytes(segundo);
+     gravarExe.write(num[0] + 255);
+     gravarExe.write(num[1] + 0);
+     } else {
+     num = stringForBytes(segundo);
+     gravarExe.write(num[0]);
+     gravarExe.write(num[1]);
+     }
 
-            gravarExe.write(0);
-            gravarExe.write(0);
-        } catch (IOException ex) {
-            System.out.println("Erro ao gravar no arquivo EXE");
-        }
-    }
-*/
+     gravarExe.write(0);
+     gravarExe.write(0);
+     } catch (IOException ex) {
+     System.out.println("Erro ao gravar no arquivo EXE");
+     }
+     }
+     */
     public void fecharArquivo() {
         try {
             gravarAsm.flush();
@@ -253,10 +260,12 @@ public class LeituraArquivo {
             int numTeste1, numTeste2;
             boolean teste = true;//false;           // coloque false para exibir apartir da linha errada
             for (int i = 0; i < 700; i++) {
-                if (i == 190)
+                if (i == 190) {
                     System.out.println("color");
-                if (i == 582)
+                }
+                if (i == 582) {
                     System.out.println("fim da declaração");
+                }
                 numTeste1 = teste1.read();
                 numTeste2 = teste2.read();
                 if (numTeste1 != numTeste2 && !teste) {
@@ -264,7 +273,7 @@ public class LeituraArquivo {
                     System.out.println("linha: " + i);
                 }
                 if (teste) {
-                System.out.println(">>>> " + numTeste1 + " == " + numTeste2);
+                    System.out.println(">>>> " + numTeste1 + " == " + numTeste2);
                 }
             }
 

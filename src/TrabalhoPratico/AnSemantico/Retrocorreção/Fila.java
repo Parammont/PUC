@@ -10,7 +10,7 @@ import TrabalhoPratico.AnSemantico.Instrucoes;
 import java.util.LinkedList;
 import java.util.List;
 
-public class Fila extends Instrucoes{
+public class Fila extends Instrucoes {
 
     private List<dados> objetos;
 
@@ -36,7 +36,7 @@ public class Fila extends Instrucoes{
         }
         return true;
     }
-    
+
     public String teste() {
         dados x = objetos.get(0);
         if (x.getRot() != null) {
@@ -48,95 +48,136 @@ public class Fila extends Instrucoes{
     public boolean vazia() {
         return this.objetos.size() == 0;
     }
-    
-    
-    public void reiniciar () {
+
+    public void reiniciar() {
         dados x = remove();
         int inst = x.getInstrucao();
-        switch (inst) {
-            case 1:
+        if (inst < 10) {
+//        switch (inst) {
+            if (inst == 1) {
                 ADD(x.getReg1(), x.getReg2());
-            case 2:
+                PC -= 3;
+            } else if (inst == 2) {
                 ADDF(x.getReg1(), x.getReg2());
-            case 3:
-                ADI(x.getReg1(),x.getImed());
-            case 4:
+                PC -= 3;
+            } else if (inst == 3) {
+                ADI(x.getReg1(), x.getImed());
+                PC -= 3;
+            } else if (inst == 4) {
                 ADIF(x.getReg1(), x.getImed(), x.getImed1());
-            case 5:
+                PC -= 4;
+            } else if (inst == 5) {
                 BNG(x.getReg1(), x.getRot());
-            case 6:
+                PC -= 3;
+            } else if (inst == 6) {
                 BNGF(x.getReg1(), x.getRot());
-            case 7:
+                PC -= 3;
+            } else if (inst == 7) {
                 BNN(x.getReg1(), x.getRot());
-            case 8:
+                PC -= 3;
+            } else if (inst == 8) {
                 BNNF(x.getReg1(), x.getRot());
-            case 9:
+                PC -= 3;
+            } else if (inst == 9) {
                 BNP(x.getReg1(), x.getRot());
-            case 10:
+                PC -= 3;
+            }
+        } else if (inst < 20) {
+            if (inst == 10) {
                 BNPF(x.getReg1(), x.getRot());
-            case 11:
+            } else if (inst == 11) {
                 BNZ(x.getReg1(), x.getRot());
-            case 12:
+            } else if (inst == 12) {
                 BNZF(x.getReg1(), x.getRot());
-            case 13:
+            } else if (inst == 13) {
                 BPS(x.getReg1(), x.getRot());
-            case 14:
+            } else if (inst == 14) {
                 BPSF(x.getReg1(), x.getRot());
-            case 15:
+            } else if (inst == 15) {
                 BZR(x.getReg1(), x.getRot());
-            case 16:
+            } else if (inst == 16) {
                 BZRF(x.getReg1(), x.getRot());
-            case 17:
+            } else if (inst == 17) {
                 CNV(x.getReg1(), x.getReg2());
-            case 18:
+            } else if (inst == 18) {
                 DIV(x.getReg1(), x.getReg2());
-            case 19:
+            } else if (inst == 19) {
                 ESC(x.getReg1(), x.getReg2());
-            case 20:
+            }
+            PC -= 3;
+        } else if (inst < 20) {
+            if (inst == 20) {
                 HLT();
-            case 21:
+                PC -= 1;
+            } else if (inst == 21) {
                 JMP(x.getRot());
-            case 22:
+                PC -= 2;
+            } else if (inst == 22) {
                 LDI(x.getReg1(), x.getImed());
-            case 23:
+                PC -= 3;
+            } else if (inst == 23) {
                 LDIF(x.getReg1(), x.getImed(), x.getImed1());
-            case 24:
+                PC -= 4;
+            } else if (inst == 24) {
                 LGT(x.getReg1());
-            case 25:
-                LOD(x.getReg1(), ""+x.getImed());
-            case 26:
-                LODF(x.getReg1(), ""+x.getImed());
-            case 27:
+                PC -= 2;
+            } else if (inst == 25) {
+                LOD(x.getReg1(), "" + x.getImed());
+                PC -= 3;
+            } else if (inst == 26) {
+                LODF(x.getReg1(), "" + x.getImed());
+                PC -= 3;
+            } else if (inst == 27) {
                 MVE(x.getReg1(), x.getReg2());
-            case 28:
+                PC -= 3;
+            } else if (inst == 28) {
                 MVEF(x.getReg1(), x.getReg2());
-            case 29:
+                PC -= 3;
+            } else if (inst == 29) {
                 MUL(x.getReg1(), x.getReg2());
-            case 30:
+                PC -= 3;
+            }
+        } else {
+            if (inst == 30) {
                 MULF(x.getReg1(), x.getReg2());
-            case 31:
+                PC -= 3;
+            } else if (inst == 31) {
                 NEG(x.getReg1());
-            case 32:
+                PC -= 2;
+            } else if (inst == 32) {
                 NEGF(x.getReg1());
-            case 33:
+                PC -= 2;
+            } else if (inst == 33) {
                 RTR();
-            case 34:
-                STI(x.getImed1(),""+x.getImed());
-            case 35:
+                PC -= 1;
+            } else if (inst == 34) {
+                STI(x.getImed1(), "" + x.getImed());
+        DS -= 1;
+        PC -= 3;
+            } else if (inst == 35) {
                 STIF(x.getImed1(),x.getImed2(),""+x.getImed());
-            case 36:
-                STO(x.getReg1(), ""+x.getImed());
-            case 37:
-                STOF(x.getReg1(), ""+x.getImed());
-            case 38:
+        DS -= 2;
+        PC -= 4;
+            } else if (inst == 36) {
+                STO(x.getReg1(), "" + x.getImed());
+        DS -= 1;
+        PC -= 3;
+            } else if (inst == 37) {
+                STOF(x.getReg1(), "" + x.getImed());
+        DS -= 2;
+        PC -= 3;
+            } else if (inst == 38) {
                 SUB(x.getReg1(), x.getReg2());
-            case 39:
+        PC -= 3;
+            } else if (inst == 39) {
                 SUBF(x.getReg1(), x.getReg2());
-            case 40:
+                PC -= 3;
+            } else if (inst == 40) {
                 TIME(x.getReg1());
-                
-        default:
-            System.out.println("ERRO ao remover da fila\nInstrução invalida: " + inst);
+                PC -= 2;
+            } else {
+                System.out.println("ERRO ao remover da fila\nInstrução invalida: " + inst);
+            }
         }
     }
 }

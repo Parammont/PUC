@@ -61,6 +61,7 @@ public class BlocoComando extends CasaToken {
     //comando -> while Exp (comando | BlocoComando) 
     private void comandWhile() {
         CasaToken("while");
+        Principal.arquivo.gravarAsm("************************** Enquanto ******");
         String resp[] = Exp();
         if (!(resp[0].equals("tipo-logico"))) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
@@ -101,15 +102,18 @@ public class BlocoComando extends CasaToken {
         CasaToken("scale");
         if (rl.getClasse().equals("classe-objeto")) {
             id(new ClasseDeTeste(), true);
+            LODF("A", ""+rlAntigo.getEndMen());
         } else {
             System.out.println(rl.getLinha() + ":Identificador incompativel [" + rl.getLexema() + "]");
             Principal.parar = true;
         }
         CasaToken(",");
-        if (Exp().equals("tipo-logico")) {
+        String [] temp = Exp();
+        if (temp[0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
+        LDI("A",Integer.parseInt(temp[1]));
         CasaToken(";");
     }
 

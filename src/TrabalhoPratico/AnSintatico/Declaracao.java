@@ -47,6 +47,7 @@ public class Declaracao extends CasaToken {
                 consta();
             }
         } while ((rl.getEndereco() >= 0 && rl.getEndereco() <= 6) && !(Principal.parar));
+        CS = DS;
     }
 
     private void point() {
@@ -137,7 +138,7 @@ public class Declaracao extends CasaToken {
             id(teste, false);
             CasaToken("=");
             if (rl.getClasse().equals("classe-cor")) {
-                inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                inst2.insere(new dados(34, DS, rl.getEndMen()));       /// Guarda STI
                 DS += 1;
                 PC += 3;
                 id(teste, true);
@@ -149,7 +150,7 @@ public class Declaracao extends CasaToken {
             while (rl.getLexema().equals(",") || cont < 3) {
                 CasaToken(",");
                 if (rl.getClasse().equals("classe-ponto")) {
-                    inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                    inst2.insere(new dados(34, DS, rl.getEndMen()));       /// Guarda STI
                     DS += 1;
                     PC += 3;
                     id(teste, true);
@@ -162,10 +163,10 @@ public class Declaracao extends CasaToken {
             CasaToken(";");
             STI(cont, "" + DSQuantPontos);
             while (!inst2.vazia()) {
-                inst2.remove();
-                DS -= 1;
-                PC -= 3;
+                inst2.reiniciar();
             }
+            DS -= 1;
+            //PC -= 3;
         } while (isIdentificador());
     }
 
@@ -177,12 +178,12 @@ public class Declaracao extends CasaToken {
             Fila inst2 = new Fila();
             rl.setEndMen(DS);
             int DSQuantPontos = DS;
-            DS = DS + 3;
+            DS += 3;
 
             id(teste, false);
             CasaToken("=");
             if (rl.getClasse().equals("classe-face")) {
-                inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                inst2.insere(new dados(34, DS, rl.getEndMen()));       /// Guarda STI
                 DS += 1;
                 PC += 3;
                 id(teste, true);
@@ -195,7 +196,7 @@ public class Declaracao extends CasaToken {
             while (rl.getLexema().equals(",")) {
                 CasaToken(",");
                 if (rl.getClasse().equals("classe-face")) {
-                    inst2.insere(new dados(34, "" + DS, rl.getEndMen()));       /// Guarda STI
+                    inst2.insere(new dados(34, DS, rl.getEndMen()));       /// Guarda STI
                     DS += 1;
                     PC += 3;
                     id(teste, true);
@@ -210,10 +211,10 @@ public class Declaracao extends CasaToken {
             STI(cont, "" + DSQuantPontos);
             STIF(1, 0, "" + (DSQuantPontos + 1));
             while (!inst2.vazia()) {
-                inst2.remove();
-                DS -= 1;
-                PC -= 3;
+                inst2.reiniciar();
             }
+            DS -= 3;
+            //PC -= 3;
 
         } while (isIdentificador());
     }
@@ -277,10 +278,10 @@ public class Declaracao extends CasaToken {
 
             if (rlAntigo.getTipo().equals("tipo-inteiro")) {
                 rlDeclarado.setTipo(true);
-                STI(rlAntigo.getInteiro(), ""+DS);
+                STI(rlAntigo.getInteiro(), "" + DS);
             } else {
                 rlDeclarado.setTipo(false);
-                STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), ""+DS);
+                STIF(rlAntigo.getInteiro(), rlAntigo.getDecimal(), "" + DS);
             }
             CasaToken(";");
         } while (isIdentificador());

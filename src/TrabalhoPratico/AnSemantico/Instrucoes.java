@@ -20,17 +20,18 @@ public class Instrucoes {
     public static RegistroLexico rlAntigo = new RegistroLexico();
     public static int contTemp = 0;          //contador de temporario
     public static int contRot = 0;           //contador de rotulos
-    public static int PC = 0;
     private static ArrayList<Rotulo> dadoRotulo = new ArrayList<Rotulo>();
     private boolean desvios = true;
     private static Fila inst = new Fila();
 
     public static int DS = 0;           //armazena o endereço da área de dados da memória principal
+    public static int CS = -1;          //armazena o primeiro endereço da área de código da memória principal
+    public static int PC = 0;           //armazena o endereço da próxima instrução a ser executada
 
     //ADD	1	RegD <- RegD + RegO	ADD A,B
     public void ADD(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("ADD " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tADD\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(1);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -43,7 +44,7 @@ public class Instrucoes {
     //ADDF	2	RegD <- RegD + RegO	ADDF A,B
     public void ADDF(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("ADDF " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tADDF\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(2);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -56,7 +57,7 @@ public class Instrucoes {
     //ADI	3	RegD <- RegD + Imed	ADI A,#1
     public void ADI(String regD, int Imed) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("ADI " + regD + ",#" + Imed);
+            Principal.arquivo.gravarAsm("\tADI\t" + regD + " ,#" + Imed);
             Principal.arquivo.gravarExe(3);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(Imed);
@@ -69,7 +70,7 @@ public class Instrucoes {
     //ADIF	4	RegD <- RegD + Imed	ADIF A,#1.0
     public void ADIF(String regD, int inte, int deci) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("ADI " + regD + ",#" + inte + "." + paraString(deci));
+            Principal.arquivo.gravarAsm("\tADI\t" + regD + " ,#" + inte + "." + paraString(deci));
             Principal.arquivo.gravarExe(4);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(inte);
@@ -314,7 +315,7 @@ public class Instrucoes {
     //LDI	22	RegD <- Imed		LDI A,#1
     public void LDI(String regD, int Imed) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("LDI " + regD + ",#" + Imed);
+            Principal.arquivo.gravarAsm("\tLDI\t" + regD + " ,#" + Imed);
             Principal.arquivo.gravarExe(22);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(Imed);
@@ -341,7 +342,7 @@ public class Instrucoes {
     //LGT	24	LuzCor <- Reg		LGT A
     public void LGT(String reg) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("LGT " + reg);
+            Principal.arquivo.gravarAsm("\tLGT\t" + reg);
             Principal.arquivo.gravarExe(24);
             Principal.arquivo.gravarExe(getReg(reg));
         } else {
@@ -466,7 +467,7 @@ public class Instrucoes {
     //STI	34	M[DS+Desl] <- Imed	STI #1,10(DS)
     public void STI(int Imed, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("STI #" + Imed + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tSTI\t#" + Imed + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(34);
             Principal.arquivo.gravarExe(Imed);
             Principal.arquivo.gravarExe(M);
@@ -480,7 +481,7 @@ public class Instrucoes {
     //STIF	35	M[DS+Desl] <- Imed	STIF #1.0,10(DS)
     public void STIF(int inte, int deci, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("STIF #" + inte + "." + paraString(deci) + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tSTIF\t#" + inte + "." + paraString(deci) + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(35);
             Principal.arquivo.gravarExe(inte);
             Principal.arquivo.gravarExe(deci);
@@ -572,7 +573,7 @@ public class Instrucoes {
         Principal.arquivo.gravarAsm(rot.getNome() + ":");
         //Principal.arquivo.gravarExe(rot.end());
         for (desvios = inst.liberado(); desvios; desvios = inst.liberado()) {
-            inst.remove();
+            inst.reiniciar();
         }
         desvios = inst.vazia();
     }
