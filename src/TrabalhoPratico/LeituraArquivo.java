@@ -252,7 +252,7 @@ public class LeituraArquivo {
             gravarExe.close();
 
             // **************Apenas um teste ****************
-            FileInputStream teste1, teste2;
+/*            FileInputStream teste1, teste2;
             String testenome = nome2.substring(0, (nome2.length() - 3));
             teste1 = new FileInputStream(testenome + ".exe");
             teste2 = new FileInputStream(testenome + "1.exe");
@@ -277,7 +277,7 @@ public class LeituraArquivo {
                 }
             }
 
-            //***********************************************
+            //************************************************/
         } catch (FileNotFoundException ex) {
             System.out.println("Erro ao salvar arquivo (local do arquivo não foi salvo)");
         } catch (IOException ex) {
