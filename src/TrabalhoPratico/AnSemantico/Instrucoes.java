@@ -279,7 +279,7 @@ public class Instrucoes {
     //ESC	19	Reg1 -> escala <- Reg2	ESC A,B
     public void ESC(String reg1, String reg2) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("ESC " + reg1 + "," + reg2);
+            Principal.arquivo.gravarAsm("\tESC\t" + reg1 + " , " + reg2);
             Principal.arquivo.gravarExe(19);
             Principal.arquivo.gravarExe(getReg(reg1));
             Principal.arquivo.gravarExe(getReg(reg2));
@@ -367,7 +367,7 @@ public class Instrucoes {
     //LODF	26	RegD <- M[DS+Desl]	LOD A,10(DS)
     public void LODF(String regD, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("LODF " + regD + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tLODF\t" + regD + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(26);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(M);

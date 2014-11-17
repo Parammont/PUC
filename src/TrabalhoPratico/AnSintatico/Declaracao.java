@@ -227,6 +227,7 @@ public class Declaracao extends CasaToken {
                 CasaToken("int");
                 teste.definirTipo("tipo-inteiro");
                 do {
+                    rl.setEndMen(DS);
                     id(teste, false);
                     if (rl.getLexema().equals("=")) {
                         CasaToken("=");
@@ -271,6 +272,7 @@ public class Declaracao extends CasaToken {
 
         do {
             RegistroLexico rlDeclarado = new RegistroLexico();
+            rl.setEndMen(DS);
             id(teste, false);
             rlDeclarado.clone(rlAntigo);
             CasaToken("=");

@@ -100,20 +100,23 @@ public class BlocoComando extends CasaToken {
     //comando -> scale id, Exp;
     private void comandScale() {
         CasaToken("scale");
+        int temp = 0;
         if (rl.getClasse().equals("classe-objeto")) {
             id(new ClasseDeTeste(), true);
-            LODF("A", ""+rlAntigo.getEndMen());
+            temp = rlAntigo.getEndMen();
         } else {
             System.out.println(rl.getLinha() + ":Identificador incompativel [" + rl.getLexema() + "]");
             Principal.parar = true;
         }
         CasaToken(",");
-        String [] temp = Exp();
-        if (temp[0].equals("tipo-logico")) {
+        String [] temp2 = Exp();
+        if (temp2[0].equals("tipo-logico")) {
             System.out.println(rl.getLinha() + ":tipos incompatíveis.");
             Principal.parar = true;
         }
-        LDI("A",Integer.parseInt(temp[1]));
+        LODF("A", temp2[1]);
+        LDI("A",temp);
+        ESC("A","A");
         CasaToken(";");
     }
 
@@ -647,6 +650,7 @@ public class BlocoComando extends CasaToken {
         String resp[] = new String[2];
         if (isIdentificador()) {
             resp[0] = rl.getTipo();
+            System.out.println("Erro end de " + rl.getLexema() + "  " + rl.getEndMen());
             resp[1] = "" + rl.getEndMen();
             id(new ClasseDeTeste(), true);
         } else if (rl.getLexema().equals("!")) {
@@ -685,7 +689,6 @@ public class BlocoComando extends CasaToken {
             CasaToken(")");
         }
         return resp;
-
     }
 
     private boolean ispalavraReservada() {
