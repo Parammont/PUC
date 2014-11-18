@@ -69,8 +69,8 @@ public class BlocoComando extends CasaToken {
     private void comandWhile() {
         CasaToken("while");
         Principal.arquivo.gravarAsm("************************** Enquanto ******");
-        Rotulo rotInicio = novoRot();
-        Rotulo rotFim = novoRot();
+        int rotInicio = novoRot();
+        int rotFim = novoRot();
         fimDesvio(rotInicio);
         String resp[] = Exp();
         if (!(resp[0].equals("tipo-logico"))) {
@@ -250,7 +250,7 @@ public class BlocoComando extends CasaToken {
                     LOD("B", dadosExpS[1]);
                     SUB("A", "B");
 
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BZR("A", rot);
                     LDI("A", 1);
                     fimDesvio(rot);
@@ -260,7 +260,7 @@ public class BlocoComando extends CasaToken {
                     LODF("B", dadosExpS[1]);
                     SUBF("A", "B");
 
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BZRF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -279,7 +279,7 @@ public class BlocoComando extends CasaToken {
                 }
                 //BZRF
                 SUBF("A", "B");
-                Rotulo rot = novoRot();
+                int rot = novoRot();
                 BZRF("A", rot);
                 LDIF("A", 1, 0);
                 fimDesvio(rot);
@@ -301,7 +301,7 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNP("A", rot);
                         LDI("A", 1);
                         fimDesvio(rot);
@@ -312,7 +312,7 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNPF("A", rot);
                         LDIF("A", 1, 0);
                         fimDesvio(rot);
@@ -331,7 +331,7 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNPF
                     SUBF("A", "B");
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BNPF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -347,7 +347,7 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNG("A", rot);
                         LDI("A", 1);
                         fimDesvio(rot);
@@ -358,7 +358,7 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNGF("A", rot);
                         LDIF("A", 1, 0);
                         fimDesvio(rot);
@@ -377,7 +377,7 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNGF
                     SUBF("A", "B");
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BNGF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -400,7 +400,7 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNN("A", rot);
                         LDI("A", 1);
                         fimDesvio(rot);
@@ -411,7 +411,7 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BNNF("A", rot);
                         LDIF("A", 1, 0);
                         fimDesvio(rot);
@@ -430,7 +430,7 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNNF
                     SUBF("A", "B");
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BNNF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -447,7 +447,7 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BPS("A", rot);
                         LDI("A", 1);
                         fimDesvio(rot);
@@ -458,7 +458,7 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        Rotulo rot = novoRot();
+                        int rot = novoRot();
                         BPSF("A", rot);
                         LDIF("A", 1, 0);
                         fimDesvio(rot);
@@ -477,7 +477,7 @@ public class BlocoComando extends CasaToken {
                     }
                     //BPSF
                     SUBF("A", "B");
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BPSF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -499,7 +499,7 @@ public class BlocoComando extends CasaToken {
                     LOD("B", dadosExpS[1]);
                     SUB("A", "B");
 
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BNZ("A", rot);
                     LDI("A", 1);
                     fimDesvio(rot);
@@ -509,7 +509,7 @@ public class BlocoComando extends CasaToken {
                     LODF("B", dadosExpS[1]);
                     SUBF("A", "B");
 
-                    Rotulo rot = novoRot();
+                    int rot = novoRot();
                     BNZF("A", rot);
                     LDIF("A", 1, 0);
                     fimDesvio(rot);
@@ -528,7 +528,7 @@ public class BlocoComando extends CasaToken {
                 }
                 //BNZF
                 SUBF("A", "B");
-                Rotulo rot = novoRot();
+                int rot = novoRot();
                 BNZF("A", rot);
                 LDIF("A", 1, 0);
                 fimDesvio(rot);
@@ -555,7 +555,7 @@ public class BlocoComando extends CasaToken {
                     System.out.println(rl.getLinha() + ":tipos incompatíveis.");
                     Principal.parar = true;
                 }
-                Rotulo rot = novoRot();
+                int rot = novoRot();
                 BZR("A", rot);
                 LDI("A", 1);
                 fimDesvio(rot);
@@ -678,7 +678,6 @@ public class BlocoComando extends CasaToken {
         String resp[] = new String[2];
         if (isIdentificador()) {
             resp[0] = rl.getTipo();
-            System.out.println("Erro end de " + rl.getLexema() + "  " + rl.getEndMen());
             resp[1] = "" + rl.getEndMen();
             id(new ClasseDeTeste(), true);
         } else if (rl.getLexema().equals("!")) {

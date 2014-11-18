@@ -19,8 +19,8 @@ public class Instrucoes {
     public static ApontadorRegistro rl = getApontador();
     public static RegistroLexico rlAntigo = new RegistroLexico();
     public static int contTemp = 0;          //contador de temporario
-    public static int contRot = 0;           //contador de rotulos
-    private static ArrayList<Rotulo> dadoRotulo = new ArrayList<Rotulo>();
+    public static int contRot = -1;           //contador de rotulos
+    public static ArrayList<Rotulo> dadoRotulo = new ArrayList<Rotulo>();
     private boolean desvios = true;
     private static Fila inst = new Fila();
 
@@ -83,169 +83,169 @@ public class Instrucoes {
     }
 
     //BNG	5	se (Reg<0) PC <- CS+Desl	BNG A,10(CS)
-    public void BNG(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("\tBNG\t" + reg + " , " + rot.getNome());
+    public void BNG(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNG\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(5);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(5, reg, rot));
+            inst.insere(new dados(5, reg, idRot));
         }
         PC += 3;
     }
 
     //BNGF	6	se (Reg<0) PC <- CS+Desl	BNGF A,10(CS)
-    public void BNGF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNGF " + reg + "," + rot.getNome());
+    public void BNGF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNGF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(6);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(6, reg, rot));
+            inst.insere(new dados(6, reg, idRot));
         }
         PC += 3;
     }
 
     //BNN	7	se (Reg≥0) PC <- CS+Desl	BNN A,10(CS)
-    public void BNN(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNN " + reg + "," + rot.getNome());
+    public void BNN(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNN\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(7);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(7, reg, rot));
+            inst.insere(new dados(7, reg, idRot));
         }
         PC += 3;
     }
 
     //BNNF	8	se (Reg≥0) PC <- CS+Desl 	BNNF A,10(CS)
-    public void BNNF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNNF " + reg + "," + rot.getNome());
+    public void BNNF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNNF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(8);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(8, reg, rot));
+            inst.insere(new dados(8, reg, idRot));
         }
         PC += 3;
     }
 
     //BNP	9	se (Reg≤0) PC <- CS+Desl	BNP A,10(CS)
-    public void BNP(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNP " + reg + "," + rot.getNome());
+    public void BNP(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNP\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(9);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(9, reg, rot));
+            inst.insere(new dados(9, reg, idRot));
         }
         PC += 3;
     }
 
     //BNPF	10	se (Reg≤0) PC <- CS+Desl	BNPF A,10(CS)
-    public void BNPF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNPF " + reg + "," + rot.getNome());
+    public void BNPF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNPF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(10);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(10, reg, rot));
+            inst.insere(new dados(10, reg, idRot));
         }
         PC += 3;
     }
 
     //BNZ	11	se (Reg≠0) PC <- CS+Desl	BNZ A,10(CS)
-    public void BNZ(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNZ " + reg + "," + rot.getNome());
+    public void BNZ(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNZ\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(11);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(11, reg, rot));
+            inst.insere(new dados(11, reg, idRot));
         }
         PC += 3;
     }
 
     //BNZF	12	se (Reg≠0) PC <- CS+Desl 	BNZF A,10(CS)
-    public void BNZF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BNZF " + reg + "," + rot.getNome());
+    public void BNZF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBNZF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(12);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(12, reg, rot));
+            inst.insere(new dados(12, reg, idRot));
         }
         PC += 3;
     }
 
     //BPS	13	se (Reg>0) PC <- CS+Desl	BPS A,10(CS)
-    public void BPS(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BPS " + reg + "," + rot.getNome());
+    public void BPS(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBPS\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(13);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(13, reg, rot));
+            inst.insere(new dados(13, reg, idRot));
         }
         PC += 3;
     }
 
     //BPSF	14	se (Reg>0) PC <- CS+Desl	BPSF A,10(CS)
-    public void BPSF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BPSF " + reg + "," + rot.getNome());
+    public void BPSF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBPSF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(14);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(14, reg, rot));
+            inst.insere(new dados(14, reg, idRot));
         }
         PC += 3;
     }
 
     //BZR	15	se (Reg=0) PC <- CS+Desl	BZR A,10(CS)
-    public void BZR(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BZR " + reg + "," + rot.getNome());
+    public void BZR(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBZR\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(15);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(15, reg, rot));
+            inst.insere(new dados(15, reg, idRot));
         }
         PC += 3;
     }
 
     //BZRF	16	se (Reg=0) PC <- CS+Desl	BZRF A,10(CS)
-    public void BZRF(String reg, Rotulo rot) {
-        if (desvios && rot.end() > 0) {
-            Principal.arquivo.gravarAsm("BZRF " + reg + "," + rot.getNome());
+    public void BZRF(String reg, int idRot) {
+        if (desvios && dadoRotulo.get(idRot).end() > 0) {
+            Principal.arquivo.gravarAsm("\tBZRF\t" + reg + " , " + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(16);
             Principal.arquivo.gravarExe(getReg(reg));
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
             desvios = false;
-            inst.insere(new dados(16, reg, rot));
+            inst.insere(new dados(16, reg, idRot));
         }
         PC += 3;
     }
@@ -266,7 +266,7 @@ public class Instrucoes {
     //DIV	18	RegD <- RegD / RegO	DIV A,B
     public void DIV(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("DIV " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tDIV\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(18);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -292,7 +292,7 @@ public class Instrucoes {
     //HLT	20	----------------	HLT
     public void HLT() {
         if (desvios) {
-            Principal.arquivo.gravarAsm("HLT");
+            Principal.arquivo.gravarAsm("\tHLT");
             Principal.arquivo.gravarExe(20);
         } else {
             inst.insere(new dados(20));
@@ -301,13 +301,13 @@ public class Instrucoes {
     }
 
     //JMP	21	PC <- CS+Desl		JMP 10(CS)
-    public void JMP(Rotulo rot) {
+    public void JMP(int idRot) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("JMP " + rot.getNome());
+            Principal.arquivo.gravarAsm("\tJMP\t" + dadoRotulo.get(idRot).getNome());
             Principal.arquivo.gravarExe(21);
-            Principal.arquivo.gravarExe(rot.end());
+            Principal.arquivo.gravarExe(dadoRotulo.get(idRot).end());
         } else {
-            inst.insere(new dados(21, rot));
+            inst.insere(new dados(21, idRot));
         }
         PC += 2;
     }
@@ -328,7 +328,7 @@ public class Instrucoes {
     //LDIF	23	RegD <- Imed		LDIF A,#1.0
     public void LDIF(String regD, int inte, int deci) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("LDIF " + regD + ",#" + inte + "." + paraString(deci));
+            Principal.arquivo.gravarAsm("\tLDIF\t" + regD + " ,#" + inte + "." + paraString(deci));
             Principal.arquivo.gravarExe(23);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(inte);
@@ -380,7 +380,7 @@ public class Instrucoes {
     //MVE	27	RegD <- RegO		MVE A,B
     public void MVE(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("MVE " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tMVE\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(27);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -393,7 +393,7 @@ public class Instrucoes {
     //MVEF	28	RegD <- RegO		MVE A,B
     public void MVEF(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("MVEF " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tMVEF\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(28);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -406,7 +406,7 @@ public class Instrucoes {
     //MUL	29	RegD <- RegD x RegO	MUL A,B
     public void MUL(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("MUL " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tMUL\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(29);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -419,7 +419,7 @@ public class Instrucoes {
     //MULF	30	RegD <- RegD x RegO	MUL A,B
     public void MULF(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("MULF " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tMULF\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(30);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -432,7 +432,7 @@ public class Instrucoes {
     //NEG	31	Reg <- - Reg		NEG A
     public void NEG(String reg) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("NEG " + reg);
+            Principal.arquivo.gravarAsm("\tNEG\t" + reg);
             Principal.arquivo.gravarExe(31);
             Principal.arquivo.gravarExe(getReg(reg));
         } else {
@@ -444,7 +444,7 @@ public class Instrucoes {
     //NEGF	32	Reg <- - Reg		NEGF A
     public void NEGF(String reg) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("NEGF " + reg);
+            Principal.arquivo.gravarAsm("\tNEGF\t" + reg);
             Principal.arquivo.gravarExe(32);
             Principal.arquivo.gravarExe(getReg(reg));
         } else {
@@ -496,7 +496,7 @@ public class Instrucoes {
     //STO	36	M[DS+Desl] <- Reg	STO A,10(DS)
     public void STO(String regD, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("STO " + regD + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tSTO\t" + regD + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(36);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(M);
@@ -510,7 +510,7 @@ public class Instrucoes {
     //STOF	37	M[DS+Desl] <- Reg	STOF A,10(DS)
     public void STOF(String regD, String M) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("STOF " + regD + "," + M + "(DS)");
+            Principal.arquivo.gravarAsm("\tSTOF\t" + regD + " , " + M + "(DS)");
             Principal.arquivo.gravarExe(37);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(M);
@@ -524,7 +524,7 @@ public class Instrucoes {
     //SUB	38	RegD <- RegD – RegO	SUB A,B
     public void SUB(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("SUB " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tSUB\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(38);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -537,7 +537,7 @@ public class Instrucoes {
     //SUBF	39	RegD <- RegD – RegO	SUBF A,B
     public void SUBF(String regD, String regO) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("SUBF " + regD + "," + regO);
+            Principal.arquivo.gravarAsm("\tSUBF\t" + regD + " , " + regO);
             Principal.arquivo.gravarExe(39);
             Principal.arquivo.gravarExe(getReg(regD));
             Principal.arquivo.gravarExe(getReg(regO));
@@ -550,7 +550,7 @@ public class Instrucoes {
 //TIME	40	----------------------	TIME A
     public void TME(String regD) {
         if (desvios) {
-            Principal.arquivo.gravarAsm("\tTME " + regD);
+            Principal.arquivo.gravarAsm("\tTME\t" + regD);
             Principal.arquivo.gravarExe(40);
             Principal.arquivo.gravarExe(getReg(regD));
         } else {
@@ -568,16 +568,23 @@ public class Instrucoes {
         return temp;
     }
 
-    public void fimDesvio(Rotulo rot) {
-        rot.setEndereco(PC);
-        Principal.arquivo.gravarAsm(rot.getNome() + ":");
+    public void fimDesvio(int idRot) {
+        dadoRotulo.get(idRot).setEndereco(PC);
+        
         //Principal.arquivo.gravarExe(rot.end());
         if (!inst.vazia()) {
-            for (desvios = inst.liberado(); inst.vazia(); desvios = inst.liberado()) {
+//            if (PC > dadoRotulo.get(idRot).getPC()) {
+//                PC = dadoRotulo.get(idRot).getPC();
+//            }
+            
+            desvios = inst.liberado();
+            while (!inst.vazia() && desvios) {
                 inst.reiniciar();
+                desvios = inst.liberado();
             }
             desvios = inst.vazia();
         }
+        Principal.arquivo.gravarAsm(dadoRotulo.get(idRot).getNome() + ":");
     }
 
     public int novoTemp(int tamanho) {
@@ -585,11 +592,11 @@ public class Instrucoes {
         return (DS - tamanho);
     }
 
-    public Rotulo novoRot() {
+    public int novoRot() {
         ++contRot;
-        Rotulo resp = new Rotulo("ROT" + contRot, PC, -1);
+        Rotulo resp = new Rotulo("ROT" + (contRot + 1), PC, -1);
         dadoRotulo.add(resp);
-        return resp;
+        return contRot;
     }
 
     private int getReg(String regX) {

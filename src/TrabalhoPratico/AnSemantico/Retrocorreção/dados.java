@@ -13,7 +13,6 @@ public class dados {
     private byte instrucao;
     private char reg [];
     private int imed [];
-    private Rotulo rot;
 
     public dados(int instrucao) {
         this.instrucao = (byte)instrucao;
@@ -41,6 +40,12 @@ public class dados {
         this.imed [1] = Imed2;
     }
 
+    public dados(int instrucao, int Imed) {
+        this.instrucao = (byte)instrucao;
+        this.imed = new int[1];
+        this.imed [0] = Imed;
+    }
+
     public dados(int instrucao, String regD, int Imed, int Imed2) {
         this.instrucao = (byte)instrucao;
         this.reg = new char[1];
@@ -58,18 +63,6 @@ public class dados {
         this.imed [2] = Imed2;
     }
 
-    public dados(int instrucao, String regD, Rotulo rot) {
-        this.instrucao = (byte)instrucao;
-        this.reg = new char[1];
-        this.reg [0] = regD.charAt(0);
-        this.rot = rot;
-    }
-
-    public dados(int instrucao, Rotulo rot) {
-        this.instrucao = (byte)instrucao;
-        this.rot = rot;
-    }
-
     public dados(int instrucao, String regD) {
         this.instrucao = (byte)instrucao;
         this.reg = new char[1];
@@ -82,14 +75,14 @@ public class dados {
     }
 
     public String getReg1() {
-        if (reg.length > 1) {
+        if (reg.length > 0) {
             return ""+ reg [0];
         }
         return "" + 168;
     }
 
     public String getReg2() {
-        if (reg.length > 2) {
+        if (reg.length > 1) {
             return ""+ reg [1];
         }
         return "" + 168;
@@ -105,10 +98,6 @@ public class dados {
 
     public int getImed2() {
         return imed[2];
-    }
-
-    public Rotulo getRot() {
-        return rot;
     }
 
 }
