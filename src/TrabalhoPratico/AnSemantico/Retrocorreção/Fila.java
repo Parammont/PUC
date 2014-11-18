@@ -98,7 +98,7 @@ public class Fila extends Instrucoes {
                 ESC(x.getReg1(), x.getReg2());
             }
             PC -= 3;
-        } else if (inst < 20) {
+        } else if (inst < 30) {
             if (inst == 20) {
                 HLT();
                 PC -= 1;

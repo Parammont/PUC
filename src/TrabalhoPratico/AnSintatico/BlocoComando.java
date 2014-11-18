@@ -7,7 +7,6 @@
 package TrabalhoPratico.AnSintatico;
 
 import TrabalhoPratico.AnSemantico.ClasseDeTeste;
-import TrabalhoPratico.AnSemantico.Rotulo;
 import TrabalhoPratico.Principal;
 
 public class BlocoComando extends CasaToken {
@@ -70,7 +69,7 @@ public class BlocoComando extends CasaToken {
         CasaToken("while");
         Principal.arquivo.gravarAsm("************************** Enquanto ******");
         int rotInicio = novoRot();
-        int rotFim = novoRot();
+
         fimDesvio(rotInicio);
         String resp[] = Exp();
         if (!(resp[0].equals("tipo-logico"))) {
@@ -78,7 +77,9 @@ public class BlocoComando extends CasaToken {
             Principal.parar = true;
         }
 
-        BNG("A", rotFim);
+        int rotFim = novoRot();
+        LOD("A", resp[1]);
+        BZR("A", rotFim);
 
         if (rl.getLexema().equals("begin")) {
             new BlocoComando();
@@ -242,6 +243,8 @@ public class BlocoComando extends CasaToken {
             CasaToken("=");
             CasaToken("=");
             String dadosExpS[] = ExpS();
+            int rot = novoRot();
+            int rot2 = novoRot();
             // Aqui tem loas de Exp em A e ExpS em B e sub A,B BZR e BZRF para desvio
             if (dadosExpS[0].equals(resp[0])) {
                 if (resp[0].equals("tipo-inteiro")) {
@@ -250,20 +253,24 @@ public class BlocoComando extends CasaToken {
                     LOD("B", dadosExpS[1]);
                     SUB("A", "B");
 
-                    int rot = novoRot();
                     BZR("A", rot);
-                    LDI("A", 1);
+                    LDI("A", 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDI("A", 1);
+                    fimDesvio(rot2);
                 } else {
                     //BZRF
                     LODF("A", resp[1]);
                     LODF("B", dadosExpS[1]);
                     SUBF("A", "B");
 
-                    int rot = novoRot();
                     BZRF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                 }
             } else {    // tipos diferentes
                 if (resp[0].equals("tipo-inteiro")) {
@@ -279,10 +286,12 @@ public class BlocoComando extends CasaToken {
                 }
                 //BZRF
                 SUBF("A", "B");
-                int rot = novoRot();
                 BZRF("A", rot);
-                LDIF("A", 1, 0);
+                LDIF("A", 0, 0);
+                JMP(rot2);
                 fimDesvio(rot);
+                LDIF("A", 1, 0);
+                fimDesvio(rot2);
                 resp[0] = "tipo-real";
             }
             resp = salvar(resp);
@@ -293,6 +302,8 @@ public class BlocoComando extends CasaToken {
             if (rl.getLexema().equals("=")) {
                 CasaToken("=");
                 String dadosExpS[] = ExpS();
+                int rot = novoRot();
+                int rot2 = novoRot();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNP e BNPF para desvio
                 if (dadosExpS[0].equals(resp[0])) {
                     if (resp[0].equals("tipo-inteiro")) {
@@ -301,10 +312,12 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        int rot = novoRot();
                         BNP("A", rot);
-                        LDI("A", 1);
+                        LDI("A", 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDI("A", 1);
+                        fimDesvio(rot2);
 
                     } else {
                         //BNPF
@@ -312,10 +325,12 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        int rot = novoRot();
                         BNPF("A", rot);
-                        LDIF("A", 1, 0);
+                        LDIF("A", 0, 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDIF("A", 1, 0);
+                        fimDesvio(rot2);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -331,14 +346,18 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNPF
                     SUBF("A", "B");
-                    int rot = novoRot();
                     BNPF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                     resp[0] = "tipo-real";
                 }
             } else {        //////////  no casso de ser apenas menor
                 String dadosExpS[] = ExpS();
+                int rot = novoRot();
+                int rot2 = novoRot();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNG e BNGF para desvio
                 if (dadosExpS[0].equals(resp[0])) {
                     if (resp[0].equals("tipo-inteiro")) {
@@ -347,10 +366,12 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        int rot = novoRot();
                         BNG("A", rot);
-                        LDI("A", 1);
+                        LDI("A", 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDI("A", 1);
+                        fimDesvio(rot2);
 
                     } else {
                         //BNGF
@@ -358,10 +379,12 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        int rot = novoRot();
                         BNGF("A", rot);
-                        LDIF("A", 1, 0);
+                        LDIF("A", 0, 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDIF("A", 1, 0);
+                        fimDesvio(rot2);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -377,10 +400,12 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNGF
                     SUBF("A", "B");
-                    int rot = novoRot();
                     BNGF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                     resp[0] = "tipo-real";
                 }
             }
@@ -392,6 +417,8 @@ public class BlocoComando extends CasaToken {
             if (rl.getLexema().equals("=")) {
                 CasaToken("=");
                 String dadosExpS[] = ExpS();
+                int rot = novoRot();
+                int rot2 = novoRot();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNN e BNNF para desvio
                 if (dadosExpS[0].equals(resp[0])) {
                     if (resp[0].equals("tipo-inteiro")) {
@@ -400,10 +427,12 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        int rot = novoRot();
                         BNN("A", rot);
-                        LDI("A", 1);
+                        LDI("A", 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDI("A", 1);
+                        fimDesvio(rot2);
 
                     } else {
                         //BNNF
@@ -411,10 +440,12 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        int rot = novoRot();
                         BNNF("A", rot);
-                        LDIF("A", 1, 0);
+                        LDIF("A", 0, 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDIF("A", 1, 0);
+                        fimDesvio(rot2);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -430,15 +461,20 @@ public class BlocoComando extends CasaToken {
                     }
                     //BNNF
                     SUBF("A", "B");
-                    int rot = novoRot();
                     BNNF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                     resp[0] = "tipo-real";
 
                 }
+
             } else {        //////////  no casso de ser apenas Maior
                 String dadosExpS[] = ExpS();
+                int rot = novoRot();
+                int rot2 = novoRot();
                 // Aqui tem loas de Exp em A e ExpS em B e sub A,B BPS e BPSF para desvio
                 if (dadosExpS[0].equals(resp[0])) {
                     if (resp[0].equals("tipo-inteiro")) {
@@ -447,10 +483,12 @@ public class BlocoComando extends CasaToken {
                         LOD("B", dadosExpS[1]);
                         SUB("A", "B");
 
-                        int rot = novoRot();
                         BPS("A", rot);
-                        LDI("A", 1);
+                        LDI("A", 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDI("A", 1);
+                        fimDesvio(rot2);
 
                     } else {
                         //BPSF
@@ -458,10 +496,12 @@ public class BlocoComando extends CasaToken {
                         LODF("B", dadosExpS[1]);
                         SUBF("A", "B");
 
-                        int rot = novoRot();
                         BPSF("A", rot);
-                        LDIF("A", 1, 0);
+                        LDIF("A", 0, 0);
+                        JMP(rot2);
                         fimDesvio(rot);
+                        LDIF("A", 1, 0);
+                        fimDesvio(rot2);
                     }
                 } else {    // tipos diferentes
                     if (resp[0].equals("tipo-inteiro")) {
@@ -477,10 +517,12 @@ public class BlocoComando extends CasaToken {
                     }
                     //BPSF
                     SUBF("A", "B");
-                    int rot = novoRot();
                     BPSF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                     resp[0] = "tipo-real";
                 }
             }
@@ -491,6 +533,8 @@ public class BlocoComando extends CasaToken {
             CasaToken("!");
             CasaToken("=");
             String dadosExpS[] = ExpS();
+            int rot = novoRot();
+            int rot2 = novoRot();
             // Aqui tem loas de Exp em A e ExpS em B e sub A,B BNZ e BNZF para desvio
             if (dadosExpS[0].equals(resp[0])) {
                 if (resp[0].equals("tipo-inteiro")) {
@@ -499,20 +543,24 @@ public class BlocoComando extends CasaToken {
                     LOD("B", dadosExpS[1]);
                     SUB("A", "B");
 
-                    int rot = novoRot();
                     BNZ("A", rot);
-                    LDI("A", 1);
+                    LDI("A", 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDI("A", 1);
+                    fimDesvio(rot2);
                 } else {
                     //BNZF
                     LODF("A", resp[1]);
                     LODF("B", dadosExpS[1]);
                     SUBF("A", "B");
 
-                    int rot = novoRot();
                     BNZF("A", rot);
-                    LDIF("A", 1, 0);
+                    LDIF("A", 0, 0);
+                    JMP(rot2);
                     fimDesvio(rot);
+                    LDIF("A", 1, 0);
+                    fimDesvio(rot2);
                 }
             } else {    // tipos diferentes
                 if (resp[0].equals("tipo-inteiro")) {
@@ -528,10 +576,12 @@ public class BlocoComando extends CasaToken {
                 }
                 //BNZF
                 SUBF("A", "B");
-                int rot = novoRot();
                 BNZF("A", rot);
-                LDIF("A", 1, 0);
+                LDIF("A", 0, 0);
+                JMP(rot2);
                 fimDesvio(rot);
+                LDIF("A", 1, 0);
+                fimDesvio(rot2);
                 resp[0] = "tipo-real";
             }
             resp = salvar(resp);
